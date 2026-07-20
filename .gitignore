@@ -1,0 +1,16 @@
+.env.php
+
+storage/logs/*
+!storage/logs/.gitkeep
+
+storage/temp/*
+!storage/temp/.gitkeep
+
+public/uploads/*
+!public/uploads/.gitkeep
+
+public/exports/*
+!public/exports/.gitkeep
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,38 @@
+USE finanzas_app_studio;
+
+CREATE TABLE IF NOT EXISTS templates (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    slug VARCHAR(140) NOT NULL UNIQUE,
+    description VARCHAR(255) NULL,
+    canvas_width INT UNSIGNED NOT NULL DEFAULT 1080,
+    canvas_height INT UNSIGNED NOT NULL DEFAULT 1080,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS posts (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    template_id INT UNSIGNED NULL,
+    title VARCHAR(160) NOT NULL,
+    body_text TEXT NULL,
+    screenshot_path VARCHAR(255) NULL,
+    status ENUM('draft', 'ready', 'archived') NOT NULL DEFAULT 'draft',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT posts_template_id_foreign
+        FOREIGN KEY (template_id) REFERENCES templates(id)
+        ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS exports (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    post_id INT UNSIGNED NOT NULL,
+    format VARCHAR(40) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    exported_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT exports_post_id_foreign
+        FOREIGN KEY (post_id) REFERENCES posts(id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
