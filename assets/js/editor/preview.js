@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const canvas = form.querySelector('[data-post-canvas]');
+    const scaleBox = form.querySelector('[data-preview-scale-box]');
     const templateSelect = form.querySelector('[data-preview-field="template_id"]');
     const formatSelect = form.querySelector('[data-preview-field="format"]');
     const uploadInput = form.querySelector('[data-preview-image]');
@@ -45,10 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const stage = form.querySelector('.preview-stage');
         const width = Number(formatSelect.selectedOptions[0]?.dataset.width || 1080);
         const height = Number(formatSelect.selectedOptions[0]?.dataset.height || 1080);
-        const scale = Math.min((stage.clientWidth - 48) / width, (stage.clientHeight - 48) / height, 0.52);
+        const availableWidth = Math.max(stage.clientWidth - 48, 1);
+        const availableHeight = Math.max(stage.clientHeight - 48, 1);
+        const scale = Math.min(availableWidth / width, availableHeight / height, 1);
         const safeScale = Math.max(scale, 0.18);
+
         canvas.style.transform = `scale(${safeScale})`;
-        canvas.style.marginBottom = `${height * safeScale - height}px`;
+        scaleBox.style.width = `${width * safeScale}px`;
+        scaleBox.style.height = `${height * safeScale}px`;
+        scaleBox.dataset.previewScale = String(safeScale);
     };
 
     const applyImage = (src) => {
@@ -75,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.dataset.format = format;
         canvas.style.width = `${width}px`;
         canvas.style.height = `${height}px`;
+        canvas.style.marginBottom = '0';
         nodes.label.textContent = template.label;
         nodes.title.textContent = getValue('title', 'Titulo de la publicacion');
         nodes.subtitle.textContent = getValue('subtitle');

@@ -7,12 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const button = form.querySelector('[data-export-button]');
     const canvasNode = form.querySelector('[data-post-canvas]');
+    const scaleBox = form.querySelector('[data-preview-scale-box]');
     const registerUrl = form.querySelector('[data-export-register-url]')?.value || '';
 
     const waitForImages = async () => {
         const images = Array.from(canvasNode.querySelectorAll('img')).filter((image) => image.src);
         await Promise.all(images.map((image) => {
-            if (image.complete) {
+            if (image.complete && image.naturalWidth > 0 && image.naturalHeight > 0) {
                 return Promise.resolve();
             }
 
@@ -44,18 +45,32 @@ document.addEventListener('DOMContentLoaded', () => {
             await waitForImages();
             const originalTransform = canvasNode.style.transform;
             const originalMargin = canvasNode.style.marginBottom;
-            canvasNode.style.transform = 'none';
-            canvasNode.style.marginBottom = '0';
+            const originalBoxWidth = scaleBox?.style.width || '';
+            const originalBoxHeight = scaleBox?.style.height || '';
+            let output;
 
-            const output = await window.html2canvas(canvasNode, {
-                backgroundColor: null,
-                scale: 1,
-                useCORS: true,
-                logging: false,
-            });
+            try {
+                canvasNode.style.transform = 'none';
+                canvasNode.style.marginBottom = '0';
+                if (scaleBox) {
+                    scaleBox.style.width = `${canvasNode.offsetWidth}px`;
+                    scaleBox.style.height = `${canvasNode.offsetHeight}px`;
+                }
 
-            canvasNode.style.transform = originalTransform;
-            canvasNode.style.marginBottom = originalMargin;
+                output = await window.html2canvas(canvasNode, {
+                    backgroundColor: null,
+                    scale: 1,
+                    useCORS: true,
+                    logging: false,
+                });
+            } finally {
+                canvasNode.style.transform = originalTransform;
+                canvasNode.style.marginBottom = originalMargin;
+                if (scaleBox) {
+                    scaleBox.style.width = originalBoxWidth;
+                    scaleBox.style.height = originalBoxHeight;
+                }
+            }
 
             const title = form.querySelector('[name="title"]')?.value || 'publicacion';
             const date = new Date().toISOString().slice(0, 10);

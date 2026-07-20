@@ -115,28 +115,32 @@ $action = $post === null ? '/posts/store' : '/posts/update';
             </div>
         </div>
         <div class="preview-stage">
-            <article class="post-canvas" data-post-canvas>
-                <div class="post-bg-shape"></div>
-                <header class="post-header">
-                    <img data-preview-logo alt="Finanzas App" src="<?= e(asset('images/branding/logo-finanzas-app.png')) ?>">
-                    <span data-preview-version></span>
-                </header>
-                <main class="post-content">
-                    <span class="post-label" data-preview-label>NUEVA FUNCIONALIDAD</span>
-                    <h2 data-preview-title><?= e($value('title', 'Titulo de la publicacion')) ?></h2>
-                    <p class="post-subtitle" data-preview-subtitle></p>
-                    <p class="post-description" data-preview-description></p>
-                    <div class="post-visual">
-                        <div class="post-image-frame">
-                            <img data-preview-upload alt="">
-                            <div class="post-image-placeholder">Vista del sistema</div>
+            <div class="preview-scale-box" data-preview-scale-box>
+                <article class="post-canvas" data-post-canvas>
+                    <div class="post-bg-shape"></div>
+                    <header class="post-header">
+                        <div class="post-logo-frame">
+                            <img data-preview-logo alt="Finanzas App" src="<?= e(asset('images/branding/logo-finanzas-app.png')) ?>">
                         </div>
-                        <div class="post-css-icon"></div>
-                    </div>
-                    <strong class="post-cta" data-preview-cta></strong>
-                </main>
-                <footer class="post-footer">finanzasappsan.com</footer>
-            </article>
+                        <span data-preview-version></span>
+                    </header>
+                    <main class="post-content">
+                        <span class="post-label" data-preview-label>NUEVA FUNCIONALIDAD</span>
+                        <h2 data-preview-title><?= e($value('title', 'Titulo de la publicacion')) ?></h2>
+                        <p class="post-subtitle" data-preview-subtitle></p>
+                        <p class="post-description" data-preview-description></p>
+                        <div class="post-visual">
+                            <div class="post-image-frame">
+                                <img data-preview-upload alt="">
+                                <div class="post-image-placeholder">Vista del sistema</div>
+                            </div>
+                            <div class="post-css-icon"></div>
+                        </div>
+                        <strong class="post-cta" data-preview-cta></strong>
+                    </main>
+                    <footer class="post-footer">finanzasappsan.com</footer>
+                </article>
+            </div>
         </div>
     </section>
 </form>
