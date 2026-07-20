@@ -1,11 +1,18 @@
 <?php declare(strict_types=1); ?>
 <section class="dashboard-header mb-4">
-    <div>
+    <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+        <div>
         <p class="section-kicker mb-2">Contenido promocional</p>
-        <h2 class="mb-2">Base lista para construir publicaciones editables</h2>
-        <p class="text-muted mb-0">Arquitectura inicial preparada para plantillas, capturas, textos y exportaciones futuras.</p>
+        <h2 class="mb-2">Generador de publicaciones</h2>
+        <p class="text-muted mb-0">Crea borradores con plantillas bloqueadas, preview en tiempo real y exportacion PNG.</p>
+        </div>
+        <a class="btn btn-primary" href="<?= e(url('/posts/create')) ?>">Nueva publicacion</a>
     </div>
 </section>
+
+<?php if (!$databaseAvailable): ?>
+    <div class="alert alert-warning">La base de datos no esta disponible. Revisa la configuracion local y aplica las migraciones.</div>
+<?php endif; ?>
 
 <section class="row g-3 mb-4">
     <?php foreach ($stats as $stat): ?>
@@ -22,27 +29,45 @@
     <div class="col-12 col-xl-7">
         <article class="panel">
             <div class="panel-header">
-                <h3>Estado de la Fase 1</h3>
+                <h3>Publicaciones recientes</h3>
             </div>
-            <div class="status-list">
-                <div><span></span>Estructura modular creada</div>
-                <div><span></span>Configuracion central preparada</div>
-                <div><span></span>Rutas y layout inicial disponibles</div>
-                <div><span></span>Base de datos definida para migracion manual</div>
-            </div>
+            <?php if ($recentPosts === []): ?>
+                <p class="text-muted mb-0">Todavia no hay publicaciones creadas.</p>
+            <?php else: ?>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Plantilla</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentPosts as $post): ?>
+                                <tr>
+                                    <td><a href="<?= e(url('/posts/edit?id=' . (int) $post['id'])) ?>"><?= e($post['title']) ?></a></td>
+                                    <td><?= e($post['template_name'] ?? 'Sin plantilla') ?></td>
+                                    <td><span class="badge text-bg-light border"><?= e($post['status']) ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </article>
     </div>
 
     <div class="col-12 col-xl-5">
         <article class="panel">
             <div class="panel-header">
-                <h3>Proximas areas</h3>
+                <h3>Flujo MVP</h3>
             </div>
             <div class="next-list">
-                <span>Editor visual</span>
-                <span>Gestion de plantillas</span>
-                <span>Exportacion de imagenes</span>
-                <span>Biblioteca de capturas</span>
+                <span>Elegir plantilla</span>
+                <span>Completar contenido</span>
+                <span>Guardar borrador</span>
+                <span>Exportar PNG</span>
             </div>
         </article>
     </div>

@@ -24,3 +24,8 @@ function abort_not_found(): void
     http_response_code(404);
     view('errors/404', ['title' => 'Pagina no encontrada']);
 }
+
+function request_method(): string
+{
+    return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+}

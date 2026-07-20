@@ -14,17 +14,19 @@
 
 ## Fase 2 - Gestion de plantillas
 
-- CRUD de plantillas.
-- Vista previa basica de plantilla.
-- Campos configurables por plantilla.
-- Validaciones de formularios.
+- MVP de publicaciones con plantillas prediseñadas.
+- Listado, creacion, edicion, duplicado y eliminacion de publicaciones.
+- Preview en tiempo real con JavaScript Vanilla.
+- Exportacion PNG con html2canvas.
+- Carga segura de imagenes.
+- Dashboard con datos reales de MySQL.
 
 ## Fase 3 - Publicaciones
 
-- CRUD de publicaciones.
-- Asociacion con plantillas.
-- Carga de capturas de pantalla.
-- Estados de borrador y listo.
+- Mejoras del gestor de publicaciones.
+- Busqueda avanzada.
+- Historial visual de exportaciones.
+- Reutilizacion de publicaciones existentes.
 
 ## Fase 4 - Editor visual
 

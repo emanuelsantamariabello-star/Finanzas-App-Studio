@@ -1,6 +1,6 @@
 # Finanzas App Studio
 
-Herramienta local para crear publicaciones promocionales de Finanzas App Web. Esta primera fase entrega la base modular del proyecto en PHP 8, MySQL, Bootstrap 5 y JavaScript Vanilla, sin frameworks ni Composer.
+Herramienta local para crear publicaciones promocionales de Finanzas App Web. El MVP permite crear borradores desde plantillas bloqueadas, cargar capturas, ver preview en tiempo real y exportar PNG.
 
 ## Requisitos
 
@@ -38,7 +38,11 @@ SOURCE C:/xampp/htdocs/finanzas_app_studio/database/schema.sql;
 SOURCE C:/xampp/htdocs/finanzas_app_studio/database/seeds/001_seed_templates.sql;
 ```
 
-Tambien puedes ejecutar primero `database/migrations/001_create_initial_tables.sql` si la base `finanzas_app_studio` ya existe.
+Si ya tienes la Fase 1 aplicada, ejecuta:
+
+```sql
+SOURCE C:/xampp/htdocs/finanzas_app_studio/database/migrations/002_expand_posts_for_mvp.sql;
+```
 
 ## Estructura
 
@@ -60,3 +64,41 @@ Tambien puedes ejecutar primero `database/migrations/001_create_initial_tables.s
 Incluye dashboard responsive inicial, layout reutilizable, navbar, sidebar, footer, helpers base, configuracion PDO, SQL inicial y documentacion.
 
 No incluye editor visual, exportacion PNG, CRUD completo, login, usuarios, IA ni dashboard funcional avanzado.
+
+## MVP v0.2.0
+
+Rutas disponibles:
+
+- `GET /`
+- `GET /posts`
+- `GET /posts/create`
+- `POST /posts/store`
+- `GET /posts/edit?id={id}`
+- `POST /posts/update`
+- `POST /posts/duplicate`
+- `POST /posts/delete`
+- `GET /posts/export?id={id}`
+
+Plantillas disponibles:
+
+- Nueva funcionalidad
+- Consejo financiero
+- Actualizacion de version
+
+Formatos disponibles:
+
+- Instagram cuadrado: `1080 x 1080`
+- Instagram vertical: `1080 x 1350`
+- Historia / Estado: `1080 x 1920`
+
+La exportacion usa `html2canvas` desde CDN, espera fuentes e imagenes, descarga un PNG en el navegador y registra la exportacion en MySQL.
+
+## Carga de imagenes
+
+Las imagenes se guardan en `public/uploads`. Se validan MIME real, extension, errores de carga y tamaño maximo de 8 MB. No se usa el nombre original como nombre final.
+
+## Limitaciones conocidas
+
+- La exportacion registra la ruta esperada en `exports`, pero el archivo descargado queda en el equipo del usuario por limitacion normal del navegador.
+- `html2canvas` se carga por CDN; para uso sin internet se recomienda vendorizarlo localmente en una fase posterior.
+- No hay autenticacion ni usuarios en esta fase.

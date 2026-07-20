@@ -11,6 +11,7 @@
         </div>
 
         <div class="ms-auto d-flex align-items-center gap-2">
+            <a class="btn btn-primary btn-sm" href="<?= e(url('/posts/create')) ?>">Nueva publicacion</a>
             <span class="badge text-bg-light border">Fase 1</span>
             <span class="badge app-badge">Local</span>
         </div>

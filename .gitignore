@@ -8,6 +8,7 @@ storage/temp/*
 
 public/uploads/*
 !public/uploads/.gitkeep
+!public/uploads/.htaccess
 
 public/exports/*
 !public/exports/.gitkeep

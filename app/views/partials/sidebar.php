@@ -12,11 +12,11 @@
         <a class="<?= current_path() === '/' ? 'active' : '' ?>" href="<?= e(url('/')) ?>">
             <span>Dashboard</span>
         </a>
-        <a class="disabled" href="#" aria-disabled="true">
-            <span>Plantillas</span>
+        <a class="<?= str_starts_with(current_path(), '/posts') ? 'active' : '' ?>" href="<?= e(url('/posts')) ?>">
+            <span>Publicaciones</span>
         </a>
         <a class="disabled" href="#" aria-disabled="true">
-            <span>Publicaciones</span>
+            <span>Plantillas</span>
         </a>
         <a class="disabled" href="#" aria-disabled="true">
             <span>Exportaciones</span>

@@ -1,17 +1,32 @@
 :root {
-    --app-bg: #f5f7fa;
-    --app-surface: #ffffff;
-    --app-border: #dfe5ec;
-    --app-text: #17212b;
-    --app-muted: #657485;
-    --app-primary: #146c63;
-    --app-accent: #d89f2b;
+    --fa-navy: #0B2D7A;
+    --fa-blue: #1E73EA;
+    --fa-cyan: #19B8D1;
+    --fa-turquoise: #28C6A7;
+    --fa-green: #50D45A;
+    --fa-lime: #B7F34A;
+    --fa-white: #FFFFFF;
+    --fa-background: #F4F7FB;
+    --fa-surface: #FFFFFF;
+    --fa-text: #0F172A;
+    --fa-text-muted: #64748B;
+    --fa-border: #DCE4EE;
+    --fa-gradient-primary: linear-gradient(135deg, #B7F34A 0%, #28C6A7 30%, #19B8D1 55%, #1E73EA 75%, #0B2D7A 100%);
+    --fa-gradient-dark: linear-gradient(145deg, #0B2D7A 0%, #1258B8 45%, #19B8D1 100%);
+    --fa-gradient-growth: linear-gradient(135deg, #0B2D7A 0%, #28C6A7 55%, #B7F34A 100%);
+    --app-bg: var(--fa-background);
+    --app-surface: var(--fa-surface);
+    --app-border: var(--fa-border);
+    --app-text: var(--fa-text);
+    --app-muted: var(--fa-text-muted);
+    --app-primary: var(--fa-blue);
 }
 
 body {
     min-height: 100vh;
     background: var(--app-bg);
     color: var(--app-text);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
 }
 
 .app-shell {
@@ -22,7 +37,7 @@ body {
 .app-sidebar {
     width: 270px;
     flex: 0 0 270px;
-    background: #101820;
+    background: var(--fa-gradient-dark);
     color: #ffffff;
     padding: 1.25rem;
 }
@@ -41,13 +56,13 @@ body {
     width: 42px;
     height: 42px;
     border-radius: 8px;
-    background: var(--app-primary);
-    font-weight: 700;
+    background: rgba(255, 255, 255, .16);
+    font-weight: 800;
 }
 
 .sidebar-brand span {
     display: block;
-    color: #a9b6c4;
+    color: #d8e3ef;
     font-size: .875rem;
 }
 
@@ -58,7 +73,7 @@ body {
 }
 
 .sidebar-nav a {
-    color: #cdd6df;
+    color: #e8eef6;
     text-decoration: none;
     padding: .75rem .85rem;
     border-radius: 8px;
@@ -66,7 +81,7 @@ body {
 
 .sidebar-nav a.active,
 .sidebar-nav a:hover {
-    background: rgba(20, 108, 99, .25);
+    background: rgba(255, 255, 255, .18);
     color: #ffffff;
 }
 
@@ -98,9 +113,16 @@ body {
 }
 
 .app-badge {
-    background: rgba(20, 108, 99, .12);
+    background: rgba(30, 115, 234, .12);
     color: var(--app-primary);
-    border: 1px solid rgba(20, 108, 99, .2);
+    border: 1px solid rgba(30, 115, 234, .2);
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--fa-blue);
+    --bs-btn-border-color: var(--fa-blue);
+    --bs-btn-hover-bg: var(--fa-navy);
+    --bs-btn-hover-border-color: var(--fa-navy);
 }
 
 .dashboard-header,
@@ -117,7 +139,7 @@ body {
 
 .section-kicker {
     color: var(--app-primary);
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     font-size: .75rem;
 }
@@ -180,6 +202,277 @@ body {
     color: var(--app-muted);
 }
 
+.empty-state {
+    padding: 48px 24px;
+    text-align: center;
+    border: 1px dashed var(--fa-border);
+    border-radius: 16px;
+}
+
+.editor-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.editor-panel,
+.preview-panel {
+    background: var(--fa-surface);
+    border: 1px solid var(--fa-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.preview-panel {
+    position: sticky;
+    top: 24px;
+}
+
+.preview-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.preview-toolbar span {
+    display: block;
+    font-size: .875rem;
+}
+
+.preview-stage {
+    display: grid;
+    place-items: center;
+    overflow: auto;
+    min-height: 680px;
+    background:
+        linear-gradient(90deg, rgba(15, 23, 42, .05) 1px, transparent 1px),
+        linear-gradient(rgba(15, 23, 42, .05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    border-radius: 16px;
+    border: 1px solid var(--fa-border);
+    padding: 24px;
+}
+
+.post-canvas {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 1080px;
+    height: 1080px;
+    padding: 64px;
+    color: var(--fa-white);
+    background: var(--fa-gradient-primary);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    transform-origin: top center;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+}
+
+.post-canvas[data-format="instagram_vertical"] {
+    height: 1350px;
+}
+
+.post-canvas[data-format="story"] {
+    height: 1920px;
+    padding: 72px;
+}
+
+.post-canvas.template-consejo-financiero {
+    color: var(--fa-text);
+    background: linear-gradient(145deg, #FFFFFF 0%, #F4F7FB 60%, rgba(25, 184, 209, .22) 100%);
+}
+
+.post-canvas.template-actualizacion-de-version {
+    background: var(--fa-gradient-dark);
+}
+
+.post-bg-shape {
+    position: absolute;
+    inset: auto -160px -180px auto;
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    background: rgba(183, 243, 74, .26);
+    z-index: -1;
+}
+
+.template-consejo-financiero .post-bg-shape {
+    background: var(--fa-gradient-growth);
+    opacity: .16;
+}
+
+.post-header,
+.post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 auto;
+}
+
+.post-header img {
+    width: 184px;
+    max-height: 72px;
+    object-fit: contain;
+}
+
+.post-header span {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.post-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    min-height: 0;
+}
+
+.post-label {
+    width: fit-content;
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .18);
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.template-consejo-financiero .post-label {
+    background: rgba(30, 115, 234, .10);
+    color: var(--fa-blue);
+}
+
+.post-content h2 {
+    max-width: 860px;
+    margin: 0;
+    font-size: 68px;
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.post-subtitle,
+.post-description {
+    max-width: 820px;
+    margin: 0;
+}
+
+.post-subtitle {
+    font-size: 34px;
+    line-height: 1.18;
+    font-weight: 600;
+}
+
+.post-description {
+    font-size: 28px;
+    line-height: 1.32;
+    font-weight: 500;
+}
+
+.post-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 32px;
+    align-items: center;
+}
+
+.post-image-frame {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 360px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .92);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+}
+
+.post-image-frame img {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.post-image-frame.has-image img {
+    display: block;
+}
+
+.post-image-frame.has-image .post-image-placeholder {
+    display: none;
+}
+
+.post-image-placeholder {
+    color: var(--fa-text-muted);
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.post-css-icon {
+    width: 220px;
+    height: 220px;
+    border-radius: 24px;
+    background: var(--fa-gradient-growth);
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+}
+
+.template-nueva-funcionalidad .post-css-icon,
+.template-actualizacion-de-version .post-css-icon {
+    display: none;
+}
+
+.template-consejo-financiero .post-image-frame {
+    display: none;
+}
+
+.template-consejo-financiero .post-visual {
+    grid-template-columns: 1fr;
+    justify-items: end;
+}
+
+.post-cta {
+    width: fit-content;
+    padding: 16px 24px;
+    border-radius: 16px;
+    background: var(--fa-white);
+    color: var(--fa-navy);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.template-consejo-financiero .post-cta {
+    background: var(--fa-blue);
+    color: var(--fa-white);
+}
+
+.post-footer {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.post-canvas[data-format="story"] .post-content {
+    gap: 32px;
+}
+
+.post-canvas[data-format="story"] .post-content h2 {
+    font-size: 76px;
+}
+
+.post-canvas[data-format="story"] .post-image-frame {
+    min-height: 560px;
+}
+
+.post-canvas[data-format="instagram_vertical"] .post-image-frame {
+    min-height: 440px;
+}
+
 @media (max-width: 991.98px) {
     .app-sidebar {
         position: fixed;
@@ -191,5 +484,18 @@ body {
 
     .app-sidebar.is-open {
         transform: translateX(0);
+    }
+
+    .editor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-panel {
+        position: static;
+    }
+
+    .preview-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }
