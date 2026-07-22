@@ -35,11 +35,13 @@ body {
 }
 
 .app-sidebar {
+    position: relative;
     width: 270px;
     flex: 0 0 270px;
     background: var(--fa-gradient-dark);
     color: #ffffff;
     padding: 1.25rem;
+    transition: width .2s ease, flex-basis .2s ease, padding .2s ease;
 }
 
 .sidebar-brand {
@@ -58,12 +60,35 @@ body {
     border-radius: 8px;
     background: rgba(255, 255, 255, .16);
     font-weight: 800;
+    flex: 0 0 42px;
 }
 
 .sidebar-brand span {
     display: block;
     color: #d8e3ef;
     font-size: .875rem;
+}
+
+.brand-text {
+    min-width: 0;
+}
+
+.sidebar-collapse {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    margin-left: auto;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    color: #ffffff;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+.sidebar-collapse:hover {
+    background: rgba(255, 255, 255, .2);
 }
 
 .sidebar-nav {
@@ -77,6 +102,10 @@ body {
     text-decoration: none;
     padding: .75rem .85rem;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-height: 46px;
 }
 
 .sidebar-nav a.active,
@@ -88,6 +117,23 @@ body {
 .sidebar-nav a.disabled {
     opacity: .55;
     pointer-events: none;
+}
+
+.nav-mark {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .14);
+    color: #ffffff;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.nav-label {
+    white-space: nowrap;
 }
 
 .app-main {
@@ -669,6 +715,36 @@ body {
     min-height: 440px;
 }
 
+@media (min-width: 992px) {
+    .app-shell.is-sidebar-collapsed .app-sidebar {
+        width: 88px;
+        flex-basis: 88px;
+        padding-inline: .9rem;
+    }
+
+    .app-shell.is-sidebar-collapsed .sidebar-brand {
+        justify-content: center;
+        gap: 0;
+    }
+
+    .app-shell.is-sidebar-collapsed .brand-text,
+    .app-shell.is-sidebar-collapsed .nav-label {
+        display: none;
+    }
+
+    .app-shell.is-sidebar-collapsed .sidebar-collapse {
+        position: absolute;
+        left: 64px;
+        margin-left: 0;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
+    }
+
+    .app-shell.is-sidebar-collapsed .sidebar-nav a {
+        justify-content: center;
+        padding-inline: .55rem;
+    }
+}
+
 @media (max-width: 991.98px) {
     .app-sidebar {
         position: fixed;
@@ -680,6 +756,10 @@ body {
 
     .app-sidebar.is-open {
         transform: translateX(0);
+    }
+
+    .sidebar-collapse {
+        display: none;
     }
 
     .editor-grid {

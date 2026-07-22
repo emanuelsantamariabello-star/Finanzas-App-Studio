@@ -13,7 +13,7 @@
     <link href="<?= e(asset('css/app.css')) ?>" rel="stylesheet">
 </head>
 <body>
-    <div class="app-shell">
+    <div class="app-shell" data-app-shell>
         <?php require APP_BASE_PATH . '/app/views/partials/sidebar.php'; ?>
 
         <div class="app-main">
