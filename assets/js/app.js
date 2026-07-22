@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('[data-sidebar]');
     const toggle = document.querySelector('[data-sidebar-toggle]');
     const collapse = document.querySelector('[data-sidebar-collapse]');
-    const collapseIcon = document.querySelector('[data-sidebar-collapse-icon]');
     const collapsedStorageKey = 'finanzasApp.sidebarCollapsed';
 
     const readSidebarState = () => {
@@ -33,10 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             shell.classList.toggle('is-sidebar-collapsed', isCollapsed);
             collapse.setAttribute('aria-expanded', String(!isCollapsed));
             collapse.setAttribute('aria-label', isCollapsed ? 'Expandir menu' : 'Contraer menu');
-
-            if (collapseIcon) {
-                collapseIcon.textContent = isCollapsed ? '>' : '<';
-            }
+            collapse.setAttribute('title', isCollapsed ? 'Expandir menu' : 'Contraer menu');
 
             writeSidebarState(isCollapsed);
         };

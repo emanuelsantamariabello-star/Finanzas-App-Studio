@@ -1,20 +1,20 @@
 <?php declare(strict_types=1); ?>
 <aside class="app-sidebar" data-sidebar>
     <div class="sidebar-brand">
-        <div class="brand-mark">FA</div>
-        <div class="brand-text">
-            <strong>Finanzas App</strong>
-            <span>Studio</span>
-        </div>
         <button
-            class="sidebar-collapse"
+            class="brand-mark sidebar-collapse"
             type="button"
             data-sidebar-collapse
             aria-label="Contraer menu"
             aria-expanded="true"
+            title="Contraer menu"
         >
-            <span data-sidebar-collapse-icon aria-hidden="true">&lt;</span>
+            FA
         </button>
+        <div class="brand-text">
+            <strong>Finanzas App</strong>
+            <span>Studio</span>
+        </div>
     </div>
 
     <nav class="sidebar-nav">
