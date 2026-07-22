@@ -6,6 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const collapseIcon = document.querySelector('[data-sidebar-collapse-icon]');
     const collapsedStorageKey = 'finanzasApp.sidebarCollapsed';
 
+    const readSidebarState = () => {
+        try {
+            return window.localStorage.getItem(collapsedStorageKey) === 'true';
+        } catch (error) {
+            return false;
+        }
+    };
+
+    const writeSidebarState = (isCollapsed) => {
+        try {
+            window.localStorage.setItem(collapsedStorageKey, String(isCollapsed));
+        } catch (error) {
+            return;
+        }
+    };
+
     if (sidebar && toggle) {
         toggle.addEventListener('click', () => {
             sidebar.classList.toggle('is-open');
@@ -19,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
             collapse.setAttribute('aria-label', isCollapsed ? 'Expandir menu' : 'Contraer menu');
 
             if (collapseIcon) {
-                collapseIcon.textContent = isCollapsed ? '›' : '‹';
+                collapseIcon.textContent = isCollapsed ? '>' : '<';
             }
 
-            window.localStorage.setItem(collapsedStorageKey, String(isCollapsed));
+            writeSidebarState(isCollapsed);
         };
 
-        setCollapsedState(window.localStorage.getItem(collapsedStorageKey) === 'true');
+        setCollapsedState(readSidebarState());
 
         collapse.addEventListener('click', () => {
             setCollapsedState(!shell.classList.contains('is-sidebar-collapsed'));

@@ -13,7 +13,7 @@
             aria-label="Contraer menu"
             aria-expanded="true"
         >
-            <span data-sidebar-collapse-icon aria-hidden="true">‹</span>
+            <span data-sidebar-collapse-icon aria-hidden="true">&lt;</span>
         </button>
     </div>
 
