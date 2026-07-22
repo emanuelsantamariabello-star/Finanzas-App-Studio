@@ -289,6 +289,23 @@ body {
     padding: 72px;
 }
 
+.post-canvas[data-format="facebook_story"],
+.post-canvas[data-format="whatsapp_status"] {
+    height: 1920px;
+    padding: 72px;
+}
+
+.post-canvas[data-format="facebook_post"] {
+    width: 1200px;
+    height: 630px;
+    padding: 48px 64px;
+}
+
+.post-canvas[data-format="linkedin_post"] {
+    width: 1200px;
+    height: 1200px;
+}
+
 .post-canvas.template-consejo-financiero {
     color: var(--fa-text);
     background: linear-gradient(145deg, #FFFFFF 0%, #F4F7FB 60%, rgba(25, 184, 209, .22) 100%);
@@ -480,11 +497,64 @@ body {
     gap: 32px;
 }
 
+.post-canvas[data-format="facebook_story"] .post-content,
+.post-canvas[data-format="whatsapp_status"] .post-content {
+    gap: 32px;
+}
+
 .post-canvas[data-format="story"] .post-content h2 {
     font-size: 76px;
 }
 
+.post-canvas[data-format="facebook_story"] .post-content h2,
+.post-canvas[data-format="whatsapp_status"] .post-content h2 {
+    font-size: 76px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-content {
+    gap: 16px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-content h2 {
+    max-width: 660px;
+    font-size: 52px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-subtitle {
+    max-width: 640px;
+    font-size: 26px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-description {
+    max-width: 640px;
+    font-size: 22px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-visual {
+    grid-template-columns: minmax(0, 1fr) 160px;
+    gap: 24px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-image-frame {
+    min-height: 220px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-css-icon {
+    width: 160px;
+    height: 160px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-label,
+.post-canvas[data-format="facebook_post"] .post-cta {
+    font-size: 18px;
+}
+
 .post-canvas[data-format="story"] .post-image-frame {
+    min-height: 560px;
+}
+
+.post-canvas[data-format="facebook_story"] .post-image-frame,
+.post-canvas[data-format="whatsapp_status"] .post-image-frame {
     min-height: 560px;
 }
 

@@ -90,6 +90,10 @@ Formatos disponibles:
 - Instagram cuadrado: `1080 x 1080`
 - Instagram vertical: `1080 x 1350`
 - Historia / Estado: `1080 x 1920`
+- Facebook publicacion: `1200 x 630`
+- Facebook historia: `1080 x 1920`
+- LinkedIn publicacion: `1200 x 1200`
+- WhatsApp estado: `1080 x 1920`
 
 La exportacion usa `html2canvas` desde CDN, espera fuentes e imagenes, guarda un PNG real en `public/exports`, registra la exportacion en MySQL y descarga el archivo guardado.
 

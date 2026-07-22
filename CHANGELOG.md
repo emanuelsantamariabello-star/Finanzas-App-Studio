@@ -4,6 +4,7 @@
 
 - Guarda las exportaciones PNG reales en `public/exports`.
 - Registra en MySQL la ruta del archivo exportado guardado en servidor.
+- Agrega formatos para Facebook, LinkedIn y WhatsApp.
 
 ## v0.2.0 - MVP generador de publicaciones
 

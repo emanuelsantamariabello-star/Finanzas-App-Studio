@@ -73,6 +73,10 @@ Las plantillas son estructuras bloqueadas. El usuario solo modifica plantilla, f
 - Instagram cuadrado: `1080 x 1080`
 - Instagram vertical: `1080 x 1350`
 - Historia / Estado: `1080 x 1920`
+- Facebook publicacion: `1200 x 630`
+- Facebook historia: `1080 x 1920`
+- LinkedIn publicacion: `1200 x 1200`
+- WhatsApp estado: `1080 x 1920`
 
 ## Reglas futuras
 

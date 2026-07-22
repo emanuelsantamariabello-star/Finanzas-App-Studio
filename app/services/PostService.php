@@ -8,6 +8,10 @@ final class PostService
         'instagram_square' => ['label' => 'Instagram cuadrado', 'width' => 1080, 'height' => 1080],
         'instagram_vertical' => ['label' => 'Instagram vertical', 'width' => 1080, 'height' => 1350],
         'story' => ['label' => 'Historia / Estado', 'width' => 1080, 'height' => 1920],
+        'facebook_post' => ['label' => 'Facebook publicacion', 'width' => 1200, 'height' => 630],
+        'facebook_story' => ['label' => 'Facebook historia', 'width' => 1080, 'height' => 1920],
+        'linkedin_post' => ['label' => 'LinkedIn publicacion', 'width' => 1200, 'height' => 1200],
+        'whatsapp_status' => ['label' => 'WhatsApp estado', 'width' => 1080, 'height' => 1920],
     ];
 
     public const STATUSES = ['draft', 'exported'];
