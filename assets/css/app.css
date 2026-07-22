@@ -301,6 +301,16 @@ body {
     padding: 48px 64px;
 }
 
+.post-canvas[data-format="facebook_post"] .post-header {
+    min-height: 86px;
+    align-items: flex-start;
+}
+
+.post-canvas[data-format="facebook_post"] .post-logo-frame {
+    width: 128px;
+    height: 128px;
+}
+
 .post-canvas[data-format="linkedin_post"] {
     width: 1200px;
     height: 1200px;
@@ -342,8 +352,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width: 184px;
-    height: 72px;
+    width: 112px;
+    height: 112px;
 }
 
 .post-logo-frame img {
@@ -512,12 +522,13 @@ body {
 }
 
 .post-canvas[data-format="facebook_post"] .post-content {
-    gap: 16px;
+    justify-content: flex-start;
+    gap: 10px;
 }
 
 .post-canvas[data-format="facebook_post"] .post-content h2 {
     max-width: 660px;
-    font-size: 52px;
+    font-size: 44px;
 }
 
 .post-canvas[data-format="facebook_post"] .post-subtitle {
@@ -527,16 +538,17 @@ body {
 
 .post-canvas[data-format="facebook_post"] .post-description {
     max-width: 640px;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 .post-canvas[data-format="facebook_post"] .post-visual {
     grid-template-columns: minmax(0, 1fr) 160px;
-    gap: 24px;
+    gap: 16px;
 }
 
 .post-canvas[data-format="facebook_post"] .post-image-frame {
-    min-height: 220px;
+    min-height: 126px;
+    max-height: 136px;
 }
 
 .post-canvas[data-format="facebook_post"] .post-css-icon {
@@ -546,6 +558,19 @@ body {
 
 .post-canvas[data-format="facebook_post"] .post-label,
 .post-canvas[data-format="facebook_post"] .post-cta {
+    font-size: 18px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-label {
+    padding: 10px 18px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-cta {
+    padding: 8px 16px;
+}
+
+.post-canvas[data-format="facebook_post"] .post-footer {
+    margin-top: 8px;
     font-size: 18px;
 }
 
