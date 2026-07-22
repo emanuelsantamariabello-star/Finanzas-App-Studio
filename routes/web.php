@@ -16,5 +16,6 @@ return [
         '/posts/update' => [PostController::class, 'update'],
         '/posts/delete' => [PostController::class, 'delete'],
         '/posts/duplicate' => [PostController::class, 'duplicate'],
+        '/posts/export' => [PostController::class, 'exportStore'],
     ],
 ];

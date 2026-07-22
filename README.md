@@ -91,7 +91,7 @@ Formatos disponibles:
 - Instagram vertical: `1080 x 1350`
 - Historia / Estado: `1080 x 1920`
 
-La exportacion usa `html2canvas` desde CDN, espera fuentes e imagenes, descarga un PNG en el navegador y registra la exportacion en MySQL.
+La exportacion usa `html2canvas` desde CDN, espera fuentes e imagenes, guarda un PNG real en `public/exports`, registra la exportacion en MySQL y descarga el archivo guardado.
 
 ## Carga de imagenes
 
@@ -99,6 +99,5 @@ Las imagenes se guardan en `public/uploads`. Se validan MIME real, extension, er
 
 ## Limitaciones conocidas
 
-- La exportacion registra la ruta esperada en `exports`, pero el archivo descargado queda en el equipo del usuario por limitacion normal del navegador.
 - `html2canvas` se carga por CDN; para uso sin internet se recomienda vendorizarlo localmente en una fase posterior.
 - No hay autenticacion ni usuarios en esta fase.

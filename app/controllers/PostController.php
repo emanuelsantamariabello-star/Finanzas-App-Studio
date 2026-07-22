@@ -139,13 +139,49 @@ final class PostController
                 return;
             }
 
-            (new ExportService($pdo))->register($id, (string) $post['format']);
-            $posts->markExported($id);
-            flash('success', 'Exportacion registrada.');
+            flash('error', 'Genera la exportacion desde el boton Exportar PNG del editor.');
             redirect('/posts/edit?id=' . $id);
         } catch (Throwable) {
-            flash('error', 'No fue posible registrar la exportacion.');
+            flash('error', 'No fue posible preparar la exportacion.');
             redirect('/posts');
+        }
+    }
+
+    public function exportStore(): void
+    {
+        if (!verify_csrf()) {
+            json_response(['ok' => false, 'message' => 'La sesion expiro. Intenta nuevamente.'], 419);
+            return;
+        }
+
+        $id = valid_id($_POST['id'] ?? null);
+
+        if ($id === null) {
+            json_response(['ok' => false, 'message' => 'Publicacion no valida.'], 422);
+            return;
+        }
+
+        try {
+            $pdo = db();
+            $posts = new PostService($pdo);
+            $post = $posts->find($id);
+
+            if ($post === null) {
+                json_response(['ok' => false, 'message' => 'No se encontro la publicacion.'], 404);
+                return;
+            }
+
+            $export = (new ExportService($pdo))->storeUploadedPng($post, $_FILES['png'] ?? null);
+            $posts->markExported($id);
+
+            json_response([
+                'ok' => true,
+                'message' => 'Exportacion guardada.',
+                'download_url' => url($export['file_path']),
+                'file_path' => $export['file_path'],
+            ]);
+        } catch (Throwable) {
+            json_response(['ok' => false, 'message' => 'No fue posible guardar la exportacion.'], 500);
         }
     }
 

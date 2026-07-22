@@ -33,7 +33,7 @@ $action = $post === null ? '/posts/store' : '/posts/update';
     <input type="hidden" data-logo-url value="<?= e(asset('images/branding/logo-finanzas-app.png')) ?>">
     <input type="hidden" data-existing-image-url value="<?= $imagePath !== '' ? e(url($imagePath)) : '' ?>">
     <input type="hidden" data-post-id value="<?= e((string) ($post['id'] ?? '')) ?>">
-    <input type="hidden" data-export-register-url value="<?= $post !== null ? e(url('/posts/export?id=' . (int) $post['id'])) : '' ?>">
+    <input type="hidden" data-export-url value="<?= $post !== null ? e(url('/posts/export')) : '' ?>">
 
     <section class="editor-panel">
         <div class="panel-header">

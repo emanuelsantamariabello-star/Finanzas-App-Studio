@@ -1,5 +1,10 @@
 # Changelog
 
+## No liberado
+
+- Guarda las exportaciones PNG reales en `public/exports`.
+- Registra en MySQL la ruta del archivo exportado guardado en servidor.
+
 ## v0.2.0 - MVP generador de publicaciones
 
 - Agrega gestion de publicaciones: listado, creacion, edicion, duplicado y eliminacion.

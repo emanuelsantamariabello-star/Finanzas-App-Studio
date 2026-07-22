@@ -12,6 +12,7 @@ public/uploads/*
 
 public/exports/*
 !public/exports/.gitkeep
+!public/exports/.htaccess
 
 .DS_Store
 Thumbs.db

@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = form.querySelector('[data-export-button]');
     const canvasNode = form.querySelector('[data-post-canvas]');
     const scaleBox = form.querySelector('[data-preview-scale-box]');
-    const registerUrl = form.querySelector('[data-export-register-url]')?.value || '';
+    const exportUrl = form.querySelector('[data-export-url]')?.value || '';
+    const postId = form.querySelector('[data-post-id]')?.value || '';
 
     const waitForImages = async () => {
         const images = Array.from(canvasNode.querySelectorAll('img')).filter((image) => image.src);
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .slice(0, 80);
 
     button?.addEventListener('click', async () => {
-        if (!window.html2canvas || !registerUrl) {
+        if (!window.html2canvas || !exportUrl || !postId) {
             return;
         }
 
@@ -74,11 +75,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const title = form.querySelector('[name="title"]')?.value || 'publicacion';
             const date = new Date().toISOString().slice(0, 10);
+            const blob = await new Promise((resolve) => output.toBlob(resolve, 'image/png'));
+
+            if (!blob) {
+                throw new Error('No se pudo generar el PNG.');
+            }
+
+            const formData = new FormData();
+            formData.append('csrf_token', form.querySelector('[name="csrf_token"]')?.value || '');
+            formData.append('id', postId);
+            formData.append('png', blob, `${slugify(title)}-${date}.png`);
+
+            const response = await window.fetch(exportUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+            const result = await response.json();
+
+            if (!response.ok || !result.ok) {
+                throw new Error(result.message || 'No fue posible guardar la exportacion.');
+            }
+
             const link = document.createElement('a');
-            link.download = `finanzas-app-${slugify(title)}-${date}.png`;
-            link.href = output.toDataURL('image/png');
+            link.download = result.file_path.split('/').pop();
+            link.href = result.download_url;
             link.click();
-            window.location.href = registerUrl;
+            window.location.reload();
         } catch (error) {
             button.disabled = false;
             button.textContent = 'Exportar PNG';
