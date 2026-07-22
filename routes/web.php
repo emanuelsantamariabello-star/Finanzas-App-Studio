@@ -5,10 +5,12 @@ declare(strict_types=1);
 return [
     'GET' => [
         '/' => [DashboardController::class, 'index'],
+        '/templates' => [TemplateController::class, 'index'],
         '/posts' => [PostController::class, 'index'],
         '/posts/create' => [PostController::class, 'create'],
         '/posts/edit' => [PostController::class, 'edit'],
         '/posts/export' => [PostController::class, 'export'],
+        '/exports' => [ExportController::class, 'index'],
         '/404' => [DashboardController::class, 'notFound'],
     ],
     'POST' => [

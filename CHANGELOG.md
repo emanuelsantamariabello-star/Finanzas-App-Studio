@@ -2,6 +2,8 @@
 
 ## No liberado
 
+- Agrega modulo de plantillas como catalogo funcional.
+- Agrega listado filtrable de exportaciones.
 - Guarda las exportaciones PNG reales en `public/exports`.
 - Registra en MySQL la ruta del archivo exportado guardado en servidor.
 - Agrega formatos para Facebook, LinkedIn y WhatsApp.

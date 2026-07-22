@@ -70,6 +70,7 @@ No incluye editor visual, exportacion PNG, CRUD completo, login, usuarios, IA ni
 Rutas disponibles:
 
 - `GET /`
+- `GET /templates`
 - `GET /posts`
 - `GET /posts/create`
 - `POST /posts/store`
@@ -78,6 +79,7 @@ Rutas disponibles:
 - `POST /posts/duplicate`
 - `POST /posts/delete`
 - `GET /posts/export?id={id}`
+- `GET /exports`
 
 Plantillas disponibles:
 

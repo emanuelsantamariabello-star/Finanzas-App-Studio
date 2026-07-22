@@ -11,9 +11,17 @@ final class Template
     public function active(): array
     {
         $statement = $this->pdo->query(
-            'SELECT id, name, slug, description, canvas_width, canvas_height
+            'SELECT templates.id,
+                    templates.name,
+                    templates.slug,
+                    templates.description,
+                    templates.canvas_width,
+                    templates.canvas_height,
+                    COUNT(posts.id) AS posts_count
              FROM templates
+             LEFT JOIN posts ON posts.template_id = templates.id
              WHERE is_active = 1
+             GROUP BY templates.id, templates.name, templates.slug, templates.description, templates.canvas_width, templates.canvas_height
              ORDER BY id ASC'
         );
 

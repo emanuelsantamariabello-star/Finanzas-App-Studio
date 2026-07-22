@@ -22,3 +22,5 @@ require_once APP_BASE_PATH . '/app/services/UploadService.php';
 require_once APP_BASE_PATH . '/app/services/ExportService.php';
 require_once APP_BASE_PATH . '/app/controllers/DashboardController.php';
 require_once APP_BASE_PATH . '/app/controllers/PostController.php';
+require_once APP_BASE_PATH . '/app/controllers/TemplateController.php';
+require_once APP_BASE_PATH . '/app/controllers/ExportController.php';

@@ -18,6 +18,16 @@ final class ExportService
         return $this->exports->count();
     }
 
+    public function list(?int $templateId = null, ?string $format = null): array
+    {
+        return $this->exports->all($templateId, $format);
+    }
+
+    public function find(int $id): ?array
+    {
+        return $this->exports->find($id);
+    }
+
     public function register(int $postId, string $format): string
     {
         $filePath = 'public/exports/finanzas-app-export-' . $postId . '-' . date('Y-m-d-His') . '.png';

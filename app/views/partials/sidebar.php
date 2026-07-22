@@ -15,10 +15,10 @@
         <a class="<?= str_starts_with(current_path(), '/posts') ? 'active' : '' ?>" href="<?= e(url('/posts')) ?>">
             <span>Publicaciones</span>
         </a>
-        <a class="disabled" href="#" aria-disabled="true">
+        <a class="<?= current_path() === '/templates' ? 'active' : '' ?>" href="<?= e(url('/templates')) ?>">
             <span>Plantillas</span>
         </a>
-        <a class="disabled" href="#" aria-disabled="true">
+        <a class="<?= current_path() === '/exports' ? 'active' : '' ?>" href="<?= e(url('/exports')) ?>">
             <span>Exportaciones</span>
         </a>
     </nav>
