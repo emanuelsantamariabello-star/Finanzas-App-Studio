@@ -10,12 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const templateSelect = form.querySelector('[data-preview-field="template_id"]');
     const formatSelect = form.querySelector('[data-preview-field="format"]');
     const uploadInput = form.querySelector('[data-preview-image]');
+    const libraryImagePathInput = form.querySelector('[data-library-image-path]');
     const uploadedImage = form.querySelector('[data-preview-upload]');
     const imageFrame = form.querySelector('.post-image-frame');
     const formatInfo = form.querySelector('[data-format-info]');
     const existingImageUrl = form.querySelector('[data-existing-image-url]')?.value || '';
     const fitButton = form.querySelector('[data-preview-fit]');
     const clearImageButton = form.querySelector('[data-clear-image]');
+    const localImageButton = document.querySelector('[data-local-image-button]');
+    const selectedImageLabel = form.querySelector('[data-selected-image-label]');
     const imageAdjustControls = form.querySelector('[data-image-adjust-controls]');
     const imageWidthInput = form.querySelector('[data-image-width]');
     const imageHeightInput = form.querySelector('[data-image-height]');
@@ -64,7 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
         scaleBox.dataset.previewScale = String(safeScale);
     };
 
-    const hasPendingImage = () => uploadInput.files && uploadInput.files.length > 0;
+    const hasPendingImage = () => (uploadInput.files && uploadInput.files.length > 0) || libraryImagePathInput.value !== '';
+
+    const updateSelectedImageLabel = (label = '') => {
+        if (!selectedImageLabel) {
+            return;
+        }
+
+        if (label) {
+            selectedImageLabel.textContent = label;
+            return;
+        }
+
+        selectedImageLabel.textContent = existingImageUrl
+            ? 'Imagen actual cargada.'
+            : 'Selecciona una imagen desde la biblioteca o desde tu equipo.';
+    };
 
     const updateImageControls = () => {
         const isAdviceTemplate = getTemplateSlug() === 'consejo-financiero';
@@ -155,11 +173,18 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedImageUrl = '';
         }
 
+        libraryImagePathInput.value = '';
+
         if (file) {
             selectedImageUrl = URL.createObjectURL(file);
         }
 
         applyImage(selectedImageUrl || existingImageUrl);
+        updateSelectedImageLabel(file ? `Archivo local: ${file.name}` : '');
+
+        const modal = document.querySelector('#mediaLibraryModal');
+        const modalInstance = modal && window.bootstrap ? window.bootstrap.Modal.getInstance(modal) : null;
+        modalInstance?.hide();
     });
 
     clearImageButton?.addEventListener('click', () => {
@@ -169,7 +194,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         uploadInput.value = '';
+        libraryImagePathInput.value = '';
         applyImage(existingImageUrl);
+        updateSelectedImageLabel();
+    });
+
+    localImageButton?.addEventListener('click', () => {
+        uploadInput.click();
+    });
+
+    document.querySelectorAll('[data-media-path]').forEach((button) => {
+        button.addEventListener('click', () => {
+            if (selectedImageUrl) {
+                URL.revokeObjectURL(selectedImageUrl);
+                selectedImageUrl = '';
+            }
+
+            uploadInput.value = '';
+            libraryImagePathInput.value = button.getAttribute('data-media-path') || '';
+            applyImage(button.getAttribute('data-media-url') || existingImageUrl);
+            updateSelectedImageLabel(`Biblioteca: ${button.getAttribute('data-media-name') || 'imagen seleccionada'}`);
+        });
     });
 
     [imageWidthInput, imageHeightInput].forEach((input) => {

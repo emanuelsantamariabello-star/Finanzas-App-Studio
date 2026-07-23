@@ -13,6 +13,7 @@ $selectedTemplateId = (int) $value('template_id', $templates[0]['id'] ?? 0);
 $selectedFormat = $value('format', 'instagram_square');
 $imagePath = (string) ($post['image_path'] ?? '');
 $action = $post === null ? '/posts/store' : '/posts/update';
+$mediaLibrary = $mediaLibrary ?? [];
 $content = json_decode((string) ($post['content_json'] ?? ''), true);
 $content = is_array($content) ? $content : [];
 $contentValue = static function (string $field, mixed $default = '') use ($old, $content): string {
@@ -98,11 +99,14 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
         <?php endforeach; ?>
 
         <div class="mb-4">
-            <label class="form-label" for="image">Captura o imagen</label>
-            <input class="form-control <?= isset($errors['image']) ? 'is-invalid' : '' ?>" type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" data-preview-image>
+            <span class="form-label d-block">Captura o imagen</span>
+            <input type="hidden" name="library_image_path" data-library-image-path>
+            <input class="d-none <?= isset($errors['image']) ? 'is-invalid' : '' ?>" type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" data-preview-image>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#mediaLibraryModal">Elegir imagen</button>
                 <button class="btn btn-outline-secondary btn-sm" type="button" data-clear-image hidden>Quitar seleccion</button>
             </div>
+            <div class="form-text" data-selected-image-label><?= $imagePath !== '' ? 'Imagen actual: ' . e(basename($imagePath)) : 'Selecciona una imagen desde la biblioteca o desde tu equipo.' ?></div>
             <div class="image-adjust-controls mt-3" data-image-adjust-controls hidden>
                 <p class="text-muted small mb-2">Ajuste manual para Consejo financiero</p>
                 <div class="row g-2">
@@ -118,9 +122,6 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
                     </div>
                 </div>
             </div>
-            <?php if ($imagePath !== ''): ?>
-                <div class="form-text">Imagen actual: <?= e(basename($imagePath)) ?></div>
-            <?php endif; ?>
             <?php if (isset($errors['image'])): ?><div class="invalid-feedback"><?= e($errors['image']) ?></div><?php endif; ?>
         </div>
 
@@ -171,6 +172,49 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
         </div>
     </section>
 </form>
+
+<div class="modal fade" id="mediaLibraryModal" tabindex="-1" aria-labelledby="mediaLibraryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content media-library-modal">
+            <div class="modal-header">
+                <div>
+                    <p class="section-kicker mb-1">Biblioteca local</p>
+                    <h2 class="modal-title h5" id="mediaLibraryModalLabel">Seleccionar imagen</h2>
+                </div>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
+                    <p class="text-muted mb-0">Elige una imagen cargada recientemente o sube una nueva desde tu equipo.</p>
+                    <button class="btn btn-primary" type="button" data-local-image-button>Seleccionar del equipo</button>
+                </div>
+
+                <?php if ($mediaLibrary === []): ?>
+                    <div class="empty-state py-4">
+                        <h3 class="h6">Biblioteca vacia</h3>
+                        <p class="text-muted mb-0">Cuando subas imagenes al sistema apareceran aqui para reutilizarlas.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="media-library-grid">
+                        <?php foreach ($mediaLibrary as $media): ?>
+                            <button
+                                class="media-library-item"
+                                type="button"
+                                data-media-path="<?= e((string) $media['path']) ?>"
+                                data-media-url="<?= e((string) $media['url']) ?>"
+                                data-media-name="<?= e((string) $media['name']) ?>"
+                                data-bs-dismiss="modal"
+                            >
+                                <img src="<?= e((string) $media['url']) ?>" alt="<?= e((string) $media['name']) ?>">
+                                <span><?= e((string) $media['name']) ?></span>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="<?= e(asset('js/editor/templates.js')) ?>"></script>

@@ -685,6 +685,56 @@ body {
     background: rgba(244, 247, 251, .72);
 }
 
+.media-library-modal {
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .22);
+}
+
+.media-library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    max-height: 440px;
+    overflow-y: auto;
+}
+
+.media-library-item {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--app-border);
+    border-radius: 14px;
+    background: var(--app-surface);
+    color: var(--app-text);
+    text-align: left;
+}
+
+.media-library-item:hover,
+.media-library-item:focus-visible {
+    border-color: rgba(30, 115, 234, .34);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, .12);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.media-library-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--fa-background);
+}
+
+.media-library-item span {
+    overflow: hidden;
+    color: var(--app-muted);
+    font-size: .78rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .post-cta {
     width: fit-content;
     padding: 16px 24px;

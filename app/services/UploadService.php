@@ -5,6 +5,7 @@ declare(strict_types=1);
 final class UploadService
 {
     private const MAX_SIZE = 8388608;
+    private const LIBRARY_LIMIT = 18;
     private const ALLOWED_MIME = [
         'image/png' => 'png',
         'image/jpeg' => 'jpg',
@@ -46,6 +47,62 @@ final class UploadService
         }
 
         return ['path' => $relativePath, 'error' => null];
+    }
+
+    public function recentLibrary(): array
+    {
+        $uploadRoot = APP_BASE_PATH . '/public/uploads';
+
+        if (!is_dir($uploadRoot)) {
+            return [];
+        }
+
+        $files = glob($uploadRoot . '/*.{png,jpg,jpeg,webp}', GLOB_BRACE);
+
+        if ($files === false) {
+            return [];
+        }
+
+        usort($files, static fn (string $left, string $right): int => filemtime($right) <=> filemtime($left));
+
+        return array_map(
+            static function (string $file): array {
+                $relativePath = 'public/uploads/' . basename($file);
+
+                return [
+                    'name' => basename($file),
+                    'path' => $relativePath,
+                    'url' => url($relativePath),
+                    'size' => filesize($file) ?: 0,
+                    'updated_at' => date('Y-m-d H:i', filemtime($file) ?: time()),
+                ];
+            },
+            array_slice($files, 0, self::LIBRARY_LIMIT)
+        );
+    }
+
+    public function resolveLibraryPath(?string $path): ?string
+    {
+        if ($path === null || $path === '') {
+            return null;
+        }
+
+        if (!str_starts_with($path, 'public/uploads/')) {
+            return null;
+        }
+
+        $fullPath = realpath(APP_BASE_PATH . '/' . $path);
+        $uploadRoot = realpath(APP_BASE_PATH . '/public/uploads');
+
+        if ($fullPath === false || $uploadRoot === false || !str_starts_with($fullPath, $uploadRoot)) {
+            return null;
+        }
+
+        if (!is_file($fullPath)) {
+            return null;
+        }
+
+        return $path;
     }
 
     public function deleteIfUnused(?string $path, PostService $posts, ?int $excludeId = null): void

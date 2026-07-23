@@ -204,6 +204,7 @@ final class PostController
                 'errors' => $errors,
                 'templates' => $templates,
                 'formats' => PostService::FORMATS,
+                'mediaLibrary' => (new UploadService())->recentLibrary(),
             ]);
         } catch (Throwable) {
             flash('error', 'La base de datos no esta disponible.');
@@ -230,7 +231,9 @@ final class PostController
             }
 
             $errors = $posts->validate($_POST, $templates);
-            $uploadResult = (new UploadService())->handle($_FILES['image'] ?? null);
+            $upload = new UploadService();
+            $uploadResult = $upload->handle($_FILES['image'] ?? null);
+            $libraryImagePath = $upload->resolveLibraryPath($_POST['library_image_path'] ?? null);
             $templateId = valid_id($_POST['template_id'] ?? null);
             $template = $templateId === null ? null : $templates->find($templateId);
 
@@ -242,6 +245,7 @@ final class PostController
                 $template !== null
                 && $template['slug'] === 'nueva-funcionalidad'
                 && ($uploadResult['path'] ?? null) === null
+                && $libraryImagePath === null
                 && ($currentPost['image_path'] ?? null) === null
             ) {
                 $errors['image'] = 'Esta plantilla requiere una captura o imagen.';
@@ -252,10 +256,11 @@ final class PostController
                 return;
             }
 
-            $savedPost = $posts->save($_POST, $currentPost, $uploadResult['path']);
+            $imagePath = $uploadResult['path'] ?? $libraryImagePath;
+            $savedPost = $posts->save($_POST, $currentPost, $imagePath);
 
-            if (($uploadResult['path'] ?? null) !== null && $currentPost !== null) {
-                (new UploadService())->deleteIfUnused($currentPost['image_path'], $posts, (int) $currentPost['id']);
+            if ($imagePath !== null && $currentPost !== null && $imagePath !== ($currentPost['image_path'] ?? null)) {
+                $upload->deleteIfUnused($currentPost['image_path'], $posts, (int) $currentPost['id']);
             }
 
             flash('success', 'Borrador guardado.');
