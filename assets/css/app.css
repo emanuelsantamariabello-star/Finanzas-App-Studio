@@ -29,17 +29,25 @@ body {
     font-family: Inter, "Segoe UI", Arial, sans-serif;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+    :where(.btn, .dashboard-header, .panel, .metric-card, .template-card, .editor-panel, .preview-panel, .empty-state, .format-grid div, .sidebar-nav a) {
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+    }
+}
+
 .app-shell {
     display: flex;
     min-height: 100vh;
 }
 
 .app-sidebar {
+    position: relative;
     width: 270px;
     flex: 0 0 270px;
     background: var(--fa-gradient-dark);
     color: #ffffff;
     padding: 1.25rem;
+    transition: width .2s ease, flex-basis .2s ease, padding .2s ease;
 }
 
 .sidebar-brand {
@@ -51,19 +59,44 @@ body {
 }
 
 .brand-mark {
+    appearance: none;
+    -webkit-appearance: none;
     display: grid;
     place-items: center;
     width: 42px;
     height: 42px;
+    padding: 0;
+    border: 1px solid transparent;
     border-radius: 8px;
     background: rgba(255, 255, 255, .16);
+    color: #ffffff;
+    cursor: pointer;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
     font-weight: 800;
+    flex: 0 0 42px;
+    line-height: 1;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.brand-mark:hover,
+.brand-mark:focus-visible {
+    background: rgba(255, 255, 255, .24);
+    border-color: rgba(255, 255, 255, .32);
+    outline: none;
+}
+
+.brand-mark:active {
+    transform: scale(.96);
 }
 
 .sidebar-brand span {
     display: block;
     color: #d8e3ef;
     font-size: .875rem;
+}
+
+.brand-text {
+    min-width: 0;
 }
 
 .sidebar-nav {
@@ -77,6 +110,10 @@ body {
     text-decoration: none;
     padding: .75rem .85rem;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    min-height: 46px;
 }
 
 .sidebar-nav a.active,
@@ -85,9 +122,31 @@ body {
     color: #ffffff;
 }
 
+.sidebar-nav a:hover {
+    transform: translateX(3px);
+    box-shadow: inset 3px 0 0 rgba(183, 243, 74, .72);
+}
+
 .sidebar-nav a.disabled {
     opacity: .55;
     pointer-events: none;
+}
+
+.nav-mark {
+    display: none;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .14);
+    color: #ffffff;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.nav-label {
+    white-space: nowrap;
 }
 
 .app-main {
@@ -125,12 +184,50 @@ body {
     --bs-btn-hover-border-color: var(--fa-navy);
 }
 
+.btn {
+    border-radius: 10px;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, .06);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, .12);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary,
+.btn-success {
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0));
+}
+
 .dashboard-header,
 .panel,
 .metric-card {
     background: var(--app-surface);
     border: 1px solid var(--app-border);
-    border-radius: 8px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+}
+
+.dashboard-header:hover,
+.panel:hover,
+.metric-card:hover,
+.template-card:hover,
+.editor-panel:hover,
+.preview-panel:hover,
+.empty-state:hover,
+.format-grid div:hover {
+    border-color: rgba(30, 115, 234, .24);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, .10);
+}
+
+.metric-card:hover,
+.template-card:hover,
+.format-grid div:hover {
+    transform: translateY(-2px);
 }
 
 .dashboard-header {
@@ -560,9 +657,32 @@ body {
     display: none;
 }
 
+.template-consejo-financiero .post-image-frame.has-image {
+    display: grid;
+    width: var(--advice-image-width, 320px);
+    height: var(--advice-image-height, 320px);
+    min-height: var(--advice-image-height, 320px);
+    border-radius: 24px;
+}
+
+.template-consejo-financiero .post-image-frame.has-image img {
+    object-fit: cover;
+}
+
+.template-consejo-financiero .post-image-frame.has-image + .post-css-icon {
+    display: none;
+}
+
 .template-consejo-financiero .post-visual {
     grid-template-columns: 1fr;
     justify-items: end;
+}
+
+.image-adjust-controls {
+    padding: .85rem;
+    border: 1px solid var(--app-border);
+    border-radius: 12px;
+    background: rgba(244, 247, 251, .72);
 }
 
 .post-cta {
@@ -667,6 +787,33 @@ body {
 
 .post-canvas[data-format="instagram_vertical"] .post-image-frame {
     min-height: 440px;
+}
+
+@media (min-width: 992px) {
+    .app-shell.is-sidebar-collapsed .app-sidebar {
+        width: 88px;
+        flex-basis: 88px;
+        padding-inline: .9rem;
+    }
+
+    .app-shell.is-sidebar-collapsed .sidebar-brand {
+        justify-content: center;
+        gap: 0;
+    }
+
+    .app-shell.is-sidebar-collapsed .brand-text,
+    .app-shell.is-sidebar-collapsed .nav-label {
+        display: none;
+    }
+
+    .app-shell.is-sidebar-collapsed .nav-mark {
+        display: grid;
+    }
+
+    .app-shell.is-sidebar-collapsed .sidebar-nav a {
+        justify-content: center;
+        padding-inline: .55rem;
+    }
 }
 
 @media (max-width: 991.98px) {
