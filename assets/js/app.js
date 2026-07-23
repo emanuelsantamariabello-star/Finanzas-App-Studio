@@ -51,4 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('[data-auto-submit-file]').forEach((input) => {
+        input.addEventListener('change', () => {
+            if (input.files && input.files.length > 0) {
+                input.form?.submit();
+            }
+        });
+    });
 });

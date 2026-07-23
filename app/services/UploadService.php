@@ -51,6 +51,11 @@ final class UploadService
 
     public function recentLibrary(): array
     {
+        return $this->libraryFiles(self::LIBRARY_LIMIT);
+    }
+
+    public function libraryFiles(?int $limit = null): array
+    {
         $uploadRoot = APP_BASE_PATH . '/public/uploads';
 
         if (!is_dir($uploadRoot)) {
@@ -65,19 +70,25 @@ final class UploadService
 
         usort($files, static fn (string $left, string $right): int => filemtime($right) <=> filemtime($left));
 
+        if ($limit !== null) {
+            $files = array_slice($files, 0, $limit);
+        }
+
         return array_map(
             static function (string $file): array {
                 $relativePath = 'public/uploads/' . basename($file);
+                $size = filesize($file) ?: 0;
 
                 return [
                     'name' => basename($file),
                     'path' => $relativePath,
                     'url' => url($relativePath),
-                    'size' => filesize($file) ?: 0,
+                    'size' => $size,
+                    'size_label' => self::formatBytes($size),
                     'updated_at' => date('Y-m-d H:i', filemtime($file) ?: time()),
                 ];
             },
-            array_slice($files, 0, self::LIBRARY_LIMIT)
+            $files
         );
     }
 
@@ -105,6 +116,19 @@ final class UploadService
         return $path;
     }
 
+    public function deleteLibraryFile(string $path): bool
+    {
+        $resolvedPath = $this->resolveLibraryPath($path);
+
+        if ($resolvedPath === null) {
+            return false;
+        }
+
+        $fullPath = realpath(APP_BASE_PATH . '/' . $resolvedPath);
+
+        return $fullPath !== false && is_file($fullPath) && unlink($fullPath);
+    }
+
     public function deleteIfUnused(?string $path, PostService $posts, ?int $excludeId = null): void
     {
         if ($path === null || $path === '') {
@@ -125,5 +149,14 @@ final class UploadService
         if (is_file($fullPath)) {
             unlink($fullPath);
         }
+    }
+
+    private static function formatBytes(int $bytes): string
+    {
+        if ($bytes >= 1048576) {
+            return number_format($bytes / 1048576, 1) . ' MB';
+        }
+
+        return number_format(max($bytes, 1) / 1024, 1) . ' KB';
     }
 }

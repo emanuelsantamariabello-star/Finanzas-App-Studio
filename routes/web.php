@@ -11,6 +11,7 @@ return [
         '/posts/edit' => [PostController::class, 'edit'],
         '/posts/export' => [PostController::class, 'export'],
         '/exports' => [ExportController::class, 'index'],
+        '/library' => [LibraryController::class, 'index'],
         '/404' => [DashboardController::class, 'notFound'],
     ],
     'POST' => [
@@ -19,5 +20,7 @@ return [
         '/posts/delete' => [PostController::class, 'delete'],
         '/posts/duplicate' => [PostController::class, 'duplicate'],
         '/posts/export' => [PostController::class, 'exportStore'],
+        '/library/store' => [LibraryController::class, 'store'],
+        '/library/delete' => [LibraryController::class, 'delete'],
     ],
 ];
