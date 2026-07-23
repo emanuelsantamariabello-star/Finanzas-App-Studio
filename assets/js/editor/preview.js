@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const formatInfo = form.querySelector('[data-format-info]');
     const existingImageUrl = form.querySelector('[data-existing-image-url]')?.value || '';
     const fitButton = form.querySelector('[data-preview-fit]');
+    const clearImageButton = form.querySelector('[data-clear-image]');
+    const imageAdjustControls = form.querySelector('[data-image-adjust-controls]');
+    const imageWidthInput = form.querySelector('[data-image-width]');
+    const imageHeightInput = form.querySelector('[data-image-height]');
+    const imageWidthLabel = form.querySelector('[data-image-width-label]');
+    const imageHeightLabel = form.querySelector('[data-image-height-label]');
+    let selectedImageUrl = '';
 
     const nodes = {
         title: form.querySelector('[data-preview-title]'),
@@ -57,15 +64,49 @@ document.addEventListener('DOMContentLoaded', () => {
         scaleBox.dataset.previewScale = String(safeScale);
     };
 
+    const hasPendingImage = () => uploadInput.files && uploadInput.files.length > 0;
+
+    const updateImageControls = () => {
+        const isAdviceTemplate = getTemplateSlug() === 'consejo-financiero';
+        const hasImage = imageFrame.classList.contains('has-image');
+
+        if (clearImageButton) {
+            clearImageButton.hidden = !hasPendingImage();
+        }
+
+        if (imageAdjustControls) {
+            imageAdjustControls.hidden = !(isAdviceTemplate && hasImage);
+        }
+    };
+
+    const applyAdviceImageSize = () => {
+        const width = Number(imageWidthInput?.value || 320);
+        const height = Number(imageHeightInput?.value || 320);
+
+        imageFrame.style.setProperty('--advice-image-width', `${width}px`);
+        imageFrame.style.setProperty('--advice-image-height', `${height}px`);
+
+        if (imageWidthLabel) {
+            imageWidthLabel.textContent = `${width}px`;
+        }
+
+        if (imageHeightLabel) {
+            imageHeightLabel.textContent = `${height}px`;
+        }
+    };
+
     const applyImage = (src) => {
         if (!src) {
             uploadedImage.removeAttribute('src');
             imageFrame.classList.remove('has-image');
+            updateImageControls();
             return;
         }
 
         uploadedImage.src = src;
         imageFrame.classList.add('has-image');
+        applyAdviceImageSize();
+        updateImageControls();
     };
 
     const update = () => {
@@ -96,6 +137,8 @@ document.addEventListener('DOMContentLoaded', () => {
         form.querySelector('[data-field-row="version_label"]').style.display = slug === 'actualizacion-de-version' || slug === 'nueva-funcionalidad' ? 'block' : 'none';
 
         syncCounters();
+        applyAdviceImageSize();
+        updateImageControls();
         fitPreview();
     };
 
@@ -106,7 +149,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     uploadInput.addEventListener('change', () => {
         const file = uploadInput.files?.[0];
-        applyImage(file ? URL.createObjectURL(file) : existingImageUrl);
+
+        if (selectedImageUrl) {
+            URL.revokeObjectURL(selectedImageUrl);
+            selectedImageUrl = '';
+        }
+
+        if (file) {
+            selectedImageUrl = URL.createObjectURL(file);
+        }
+
+        applyImage(selectedImageUrl || existingImageUrl);
+    });
+
+    clearImageButton?.addEventListener('click', () => {
+        if (selectedImageUrl) {
+            URL.revokeObjectURL(selectedImageUrl);
+            selectedImageUrl = '';
+        }
+
+        uploadInput.value = '';
+        applyImage(existingImageUrl);
+    });
+
+    [imageWidthInput, imageHeightInput].forEach((input) => {
+        input?.addEventListener('input', () => {
+            applyAdviceImageSize();
+            fitPreview();
+        });
     });
 
     fitButton.addEventListener('click', fitPreview);

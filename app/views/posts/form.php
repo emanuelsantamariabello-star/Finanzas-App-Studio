@@ -13,6 +13,15 @@ $selectedTemplateId = (int) $value('template_id', $templates[0]['id'] ?? 0);
 $selectedFormat = $value('format', 'instagram_square');
 $imagePath = (string) ($post['image_path'] ?? '');
 $action = $post === null ? '/posts/store' : '/posts/update';
+$content = json_decode((string) ($post['content_json'] ?? ''), true);
+$content = is_array($content) ? $content : [];
+$contentValue = static function (string $field, mixed $default = '') use ($old, $content): string {
+    if (array_key_exists($field, $old)) {
+        return (string) $old[$field];
+    }
+
+    return (string) ($content[$field] ?? $default);
+};
 ?>
 
 <?php if ($message = flash('success')): ?>
@@ -91,6 +100,24 @@ $action = $post === null ? '/posts/store' : '/posts/update';
         <div class="mb-4">
             <label class="form-label" for="image">Captura o imagen</label>
             <input class="form-control <?= isset($errors['image']) ? 'is-invalid' : '' ?>" type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" data-preview-image>
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                <button class="btn btn-outline-secondary btn-sm" type="button" data-clear-image hidden>Quitar seleccion</button>
+            </div>
+            <div class="image-adjust-controls mt-3" data-image-adjust-controls hidden>
+                <p class="text-muted small mb-2">Ajuste manual para Consejo financiero</p>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <label class="form-label small" for="image_width">Ancho</label>
+                        <input class="form-range" type="range" id="image_width" name="image_width" min="160" max="480" step="10" value="<?= e($contentValue('image_width', '320')) ?>" data-image-width>
+                        <small class="text-muted" data-image-width-label><?= e($contentValue('image_width', '320')) ?>px</small>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label small" for="image_height">Alto</label>
+                        <input class="form-range" type="range" id="image_height" name="image_height" min="160" max="480" step="10" value="<?= e($contentValue('image_height', '320')) ?>" data-image-height>
+                        <small class="text-muted" data-image-height-label><?= e($contentValue('image_height', '320')) ?>px</small>
+                    </div>
+                </div>
+            </div>
             <?php if ($imagePath !== ''): ?>
                 <div class="form-text">Imagen actual: <?= e(basename($imagePath)) ?></div>
             <?php endif; ?>
@@ -147,5 +174,5 @@ $action = $post === null ? '/posts/store' : '/posts/update';
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="<?= e(asset('js/editor/templates.js')) ?>"></script>
-<script src="<?= e(asset('js/editor/preview.js')) ?>"></script>
+<script src="<?= e(asset('js/editor/preview.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/js/editor/preview.js')) ?>"></script>
 <script src="<?= e(asset('js/editor/export.js')) ?>"></script>

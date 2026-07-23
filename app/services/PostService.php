@@ -65,6 +65,7 @@ final class PostService
             return null;
         }
 
+        $content = $this->decodeContent($post);
         $data = $this->normalize([
             'template_id' => $post['template_id'],
             'title' => $post['title'] . ' (copia)',
@@ -73,6 +74,8 @@ final class PostService
             'cta_text' => $post['cta_text'],
             'version_label' => $post['version_label'],
             'format' => $post['format'],
+            'image_width' => $content['image_width'] ?? null,
+            'image_height' => $content['image_height'] ?? null,
         ], null, $post['image_path']);
 
         return $this->posts->create($data);
@@ -138,6 +141,8 @@ final class PostService
             'description' => trim((string) ($input['description'] ?? '')),
             'cta_text' => trim((string) ($input['cta_text'] ?? '')),
             'version_label' => trim((string) ($input['version_label'] ?? '')),
+            'image_width' => $this->normalizeDimension($input['image_width'] ?? null),
+            'image_height' => $this->normalizeDimension($input['image_height'] ?? null),
         ];
 
         return [
@@ -152,5 +157,23 @@ final class PostService
             'status' => $currentPost['status'] ?? 'draft',
             'content_json' => json_encode($content, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
         ];
+    }
+
+    private function normalizeDimension(mixed $value): int
+    {
+        $dimension = filter_var($value, FILTER_VALIDATE_INT);
+
+        if ($dimension === false) {
+            return 320;
+        }
+
+        return max(160, min(480, $dimension));
+    }
+
+    private function decodeContent(array $post): array
+    {
+        $content = json_decode((string) ($post['content_json'] ?? ''), true);
+
+        return is_array($content) ? $content : [];
     }
 }
