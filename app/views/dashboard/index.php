@@ -6,7 +6,7 @@
         <h2 class="mb-2">Generador de publicaciones</h2>
         <p class="text-muted mb-0">Crea borradores con plantillas bloqueadas, preview en tiempo real y exportacion PNG.</p>
         </div>
-        <a class="btn btn-primary" href="<?= e(url('/posts/create')) ?>">Nueva publicacion</a>
+        <a class="btn btn-primary btn-lg" href="<?= e(url('/posts/create')) ?>">Nueva publicacion</a>
     </div>
 </section>
 
@@ -26,7 +26,7 @@
 </section>
 
 <section class="row g-4">
-    <div class="col-12 col-xl-7">
+    <div class="col-12">
         <article class="panel">
             <div class="panel-header">
                 <h3>Publicaciones recientes</h3>
@@ -55,20 +55,6 @@
                     </table>
                 </div>
             <?php endif; ?>
-        </article>
-    </div>
-
-    <div class="col-12 col-xl-5">
-        <article class="panel">
-            <div class="panel-header">
-                <h3>Flujo MVP</h3>
-            </div>
-            <div class="next-list">
-                <span>Elegir plantilla</span>
-                <span>Completar contenido</span>
-                <span>Guardar borrador</span>
-                <span>Exportar PNG</span>
-            </div>
         </article>
     </div>
 </section>
