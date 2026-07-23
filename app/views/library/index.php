@@ -30,10 +30,30 @@
         <h3>Imagenes locales</h3>
     </div>
 
+    <form class="row g-3 align-items-end mb-4" method="get" action="<?= e(url('/library')) ?>">
+        <div class="col-12 col-lg-5">
+            <label class="form-label" for="q">Buscar</label>
+            <input class="form-control" id="q" name="q" value="<?= e($selectedSearch) ?>" placeholder="Nombre o etiqueta">
+        </div>
+        <div class="col-12 col-lg-4">
+            <label class="form-label" for="tag">Etiqueta</label>
+            <select class="form-select" id="tag" name="tag">
+                <option value="">Todas</option>
+                <?php foreach ($tags as $tag): ?>
+                    <option value="<?= e((string) $tag) ?>" <?= $selectedTag === $tag ? 'selected' : '' ?>><?= e((string) $tag) ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="col-12 col-lg-auto">
+            <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+            <a class="btn btn-outline-secondary" href="<?= e(url('/library')) ?>">Limpiar</a>
+        </div>
+    </form>
+
     <?php if ($files === []): ?>
         <div class="empty-state">
-            <h3>No hay imagenes cargadas</h3>
-            <p>Agrega imagenes desde este modulo o desde el editor de publicaciones.</p>
+            <h3>No hay imagenes para mostrar</h3>
+            <p>Agrega imagenes o limpia los filtros activos.</p>
         </div>
     <?php else: ?>
         <div class="media-library-grid media-library-page-grid">
@@ -46,6 +66,13 @@
                     <div class="media-library-card-body">
                         <strong title="<?= e((string) $file['name']) ?>"><?= e((string) $file['name']) ?></strong>
                         <span><?= e((string) $file['size_label']) ?> · <?= e((string) $file['updated_at']) ?></span>
+                        <?php if ($file['tags'] !== []): ?>
+                            <div class="media-tag-list">
+                                <?php foreach ($file['tags'] as $tag): ?>
+                                    <a class="badge text-bg-light border" href="<?= e(url('/library?tag=' . urlencode((string) $tag))) ?>"><?= e((string) $tag) ?></a>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                         <?php if ($useCount === null): ?>
                             <span class="badge text-bg-warning">Uso no validado</span>
                         <?php elseif ((int) $useCount > 0): ?>
@@ -54,6 +81,15 @@
                             <span class="badge app-badge">Disponible</span>
                         <?php endif; ?>
                     </div>
+                    <form method="post" action="<?= e(url('/library/tags')) ?>">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="path" value="<?= e((string) $file['path']) ?>">
+                        <label class="form-label small" for="tags_<?= e(md5((string) $file['path'])) ?>">Etiquetas</label>
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" id="tags_<?= e(md5((string) $file['path'])) ?>" name="tags" value="<?= e(implode(', ', $file['tags'])) ?>" placeholder="logo, captura">
+                            <button class="btn btn-outline-primary" type="submit">Guardar</button>
+                        </div>
+                    </form>
                     <div class="d-flex flex-wrap gap-2">
                         <a class="btn btn-sm btn-outline-primary" href="<?= e((string) $file['url']) ?>" download>Descargar</a>
                         <form method="post" action="<?= e(url('/library/delete')) ?>" data-confirm="Eliminar esta imagen de la biblioteca?">

@@ -21,6 +21,7 @@ return [
         '/posts/duplicate' => [PostController::class, 'duplicate'],
         '/posts/export' => [PostController::class, 'exportStore'],
         '/library/store' => [LibraryController::class, 'store'],
+        '/library/tags' => [LibraryController::class, 'tags'],
         '/library/delete' => [LibraryController::class, 'delete'],
     ],
 ];

@@ -7,7 +7,9 @@ final class LibraryController
     public function index(): void
     {
         $upload = new UploadService();
-        $files = $upload->libraryFiles();
+        $search = trim((string) ($_GET['q'] ?? ''));
+        $tag = trim((string) ($_GET['tag'] ?? ''));
+        $files = $upload->libraryFiles(null, $search, $tag);
         $databaseAvailable = true;
 
         try {
@@ -27,6 +29,9 @@ final class LibraryController
         view('library/index', [
             'title' => 'Biblioteca',
             'files' => $files,
+            'tags' => $upload->allTags(),
+            'selectedSearch' => $search,
+            'selectedTag' => $tag,
             'databaseAvailable' => $databaseAvailable,
         ]);
     }
@@ -51,6 +56,24 @@ final class LibraryController
         }
 
         flash('success', 'Imagen agregada a la biblioteca.');
+        redirect('/library');
+    }
+
+    public function tags(): void
+    {
+        if (!verify_csrf()) {
+            flash('error', 'La sesion expiro. Intenta nuevamente.');
+            redirect('/library');
+        }
+
+        $path = $_POST['path'] ?? null;
+        $tags = $_POST['tags'] ?? '';
+        $updated = (new UploadService())->syncTags(
+            is_string($path) ? $path : '',
+            is_string($tags) ? $tags : ''
+        );
+
+        flash($updated ? 'success' : 'error', $updated ? 'Etiquetas actualizadas.' : 'No fue posible actualizar las etiquetas.');
         redirect('/library');
     }
 

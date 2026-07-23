@@ -30,7 +30,7 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    :where(.btn, .dashboard-header, .panel, .metric-card, .template-card, .editor-panel, .preview-panel, .empty-state, .format-grid div, .sidebar-nav a) {
+    :where(.btn, .dashboard-header, .panel, .metric-card, .template-card, .editor-panel, .preview-panel, .empty-state, .format-grid div, .sidebar-nav a, .media-library-card) {
         transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
     }
 }
@@ -778,6 +778,12 @@ body {
 .media-library-card-body span {
     color: var(--app-muted);
     font-size: .82rem;
+}
+
+.media-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .post-cta {
