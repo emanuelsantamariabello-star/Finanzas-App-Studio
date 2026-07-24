@@ -20,6 +20,7 @@ return [
         '/posts/delete' => [PostController::class, 'delete'],
         '/posts/duplicate' => [PostController::class, 'duplicate'],
         '/posts/export' => [PostController::class, 'exportStore'],
+        '/posts/export-pack' => [PostController::class, 'exportPackStore'],
         '/library/store' => [LibraryController::class, 'store'],
         '/library/tags' => [LibraryController::class, 'tags'],
         '/library/delete' => [LibraryController::class, 'delete'],

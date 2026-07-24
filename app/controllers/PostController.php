@@ -202,6 +202,46 @@ final class PostController
         }
     }
 
+    public function exportPackStore(): void
+    {
+        if (!verify_csrf()) {
+            json_response(['ok' => false, 'message' => 'La sesion expiro. Intenta nuevamente.'], 419);
+            return;
+        }
+
+        $id = valid_id($_POST['id'] ?? null);
+        $format = (string) ($_POST['format'] ?? '');
+
+        if ($id === null || !isset(PostService::FORMATS[$format])) {
+            json_response(['ok' => false, 'message' => 'Formato de exportacion no valido.'], 422);
+            return;
+        }
+
+        try {
+            $pdo = db();
+            $posts = new PostService($pdo);
+            $post = $posts->find($id);
+
+            if ($post === null) {
+                json_response(['ok' => false, 'message' => 'No se encontro la publicacion.'], 404);
+                return;
+            }
+
+            $export = (new ExportService($pdo))->storeUploadedPng($post, $_FILES['png'] ?? null, $format);
+            $posts->markExported($id);
+
+            json_response([
+                'ok' => true,
+                'message' => 'Formato exportado.',
+                'download_url' => url($export['file_path']),
+                'file_path' => $export['file_path'],
+                'format' => $format,
+            ]);
+        } catch (Throwable) {
+            json_response(['ok' => false, 'message' => 'No fue posible guardar el formato exportado.'], 500);
+        }
+    }
+
     private function form(?int $id = null, array $old = [], array $errors = []): void
     {
         try {

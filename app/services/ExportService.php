@@ -36,7 +36,7 @@ final class ExportService
         return $filePath;
     }
 
-    public function storeUploadedPng(array $post, ?array $file): array
+    public function storeUploadedPng(array $post, ?array $file, ?string $format = null): array
     {
         if ($file === null || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
             throw new RuntimeException('PNG no recibido.');
@@ -59,13 +59,14 @@ final class ExportService
             throw new RuntimeException('Imagen PNG no valida.');
         }
 
-        $expected = PostService::FORMATS[(string) $post['format']] ?? null;
+        $exportFormat = $format ?? (string) $post['format'];
+        $expected = PostService::FORMATS[$exportFormat] ?? null;
 
         if ($expected === null || (int) $imageSize[0] !== $expected['width'] || (int) $imageSize[1] !== $expected['height']) {
             throw new RuntimeException('Dimensiones de exportacion no validas.');
         }
 
-        $fileName = $this->buildFileName($post);
+        $fileName = $this->buildFileName($post, $exportFormat);
         $relativePath = 'public/exports/' . $fileName;
         $destination = APP_BASE_PATH . '/' . $relativePath;
 
@@ -73,7 +74,7 @@ final class ExportService
             throw new RuntimeException('No fue posible guardar el PNG.');
         }
 
-        $this->exports->create((int) $post['id'], (string) $post['format'], $relativePath);
+        $this->exports->create((int) $post['id'], $exportFormat, $relativePath);
 
         return [
             'file_path' => $relativePath,
@@ -82,7 +83,7 @@ final class ExportService
         ];
     }
 
-    private function buildFileName(array $post): string
+    private function buildFileName(array $post, string $format): string
     {
         $title = strtolower((string) ($post['title'] ?? 'publicacion'));
         $title = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $title) ?: $title;
@@ -90,6 +91,6 @@ final class ExportService
         $slug = trim($slug, '-');
         $slug = substr($slug, 0, 80) ?: 'publicacion';
 
-        return 'finanzas-app-' . $slug . '-' . date('Y-m-d-His') . '-' . bin2hex(random_bytes(4)) . '.png';
+        return 'finanzas-app-' . $slug . '-' . $format . '-' . date('Y-m-d-His') . '-' . bin2hex(random_bytes(4)) . '.png';
     }
 }
