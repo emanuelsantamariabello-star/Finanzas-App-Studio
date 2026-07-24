@@ -24,3 +24,4 @@ require_once APP_BASE_PATH . '/app/controllers/DashboardController.php';
 require_once APP_BASE_PATH . '/app/controllers/PostController.php';
 require_once APP_BASE_PATH . '/app/controllers/TemplateController.php';
 require_once APP_BASE_PATH . '/app/controllers/ExportController.php';
+require_once APP_BASE_PATH . '/app/controllers/LibraryController.php';

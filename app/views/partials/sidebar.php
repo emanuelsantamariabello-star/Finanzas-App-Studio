@@ -34,5 +34,9 @@
             <span class="nav-mark" aria-hidden="true">E</span>
             <span class="nav-label">Exportaciones</span>
         </a>
+        <a class="<?= current_path() === '/library' ? 'active' : '' ?>" href="<?= e(url('/library')) ?>" title="Biblioteca">
+            <span class="nav-mark" aria-hidden="true">B</span>
+            <span class="nav-label">Biblioteca</span>
+        </a>
     </nav>
 </aside>

@@ -6,6 +6,8 @@ storage/logs/*
 storage/temp/*
 !storage/temp/.gitkeep
 
+storage/media-library.json
+
 public/uploads/*
 !public/uploads/.gitkeep
 !public/uploads/.htaccess
