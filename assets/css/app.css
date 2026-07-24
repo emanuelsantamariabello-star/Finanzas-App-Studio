@@ -248,10 +248,27 @@ body {
     text-align: center;
 }
 
-.list-preview-thumb img {
+.list-preview-thumb > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.list-post-preview-thumb {
+    width: 132px;
+    height: 92px;
+}
+
+.list-post-preview-box {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--fa-surface);
+}
+
+.list-post-canvas {
+    box-shadow: none;
+    pointer-events: none;
 }
 
 .dashboard-header,
