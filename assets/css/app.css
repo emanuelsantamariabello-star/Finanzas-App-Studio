@@ -222,6 +222,17 @@ body {
     padding-block: 1.25rem;
 }
 
+.duplicate-post-modal {
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+
+.duplicate-post-modal .modal-header,
+.duplicate-post-modal .modal-footer {
+    border-color: var(--app-border);
+}
+
 .dashboard-header,
 .panel,
 .metric-card {
