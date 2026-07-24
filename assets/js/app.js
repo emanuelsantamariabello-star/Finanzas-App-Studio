@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const confirmModal = document.querySelector('[data-confirm-modal]');
-    const confirmTitle = document.querySelector('[data-confirm-title]');
-    const confirmMessage = document.querySelector('[data-confirm-message]');
-    const confirmSubmit = document.querySelector('[data-confirm-submit]');
+    const confirmTitle = confirmModal?.querySelector('[data-confirm-modal-title]');
+    const confirmMessage = confirmModal?.querySelector('[data-confirm-modal-message]');
+    const confirmSubmit = confirmModal?.querySelector('[data-confirm-modal-submit]');
     let pendingConfirmForm = null;
 
     document.querySelectorAll('[data-confirm]').forEach((form) => {
