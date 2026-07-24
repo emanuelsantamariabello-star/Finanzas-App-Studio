@@ -91,4 +91,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('[data-duplicate-post]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const postId = document.querySelector('[data-duplicate-post-id]');
+            const postTitle = document.querySelector('[data-duplicate-post-title]');
+            const template = document.querySelector('[data-duplicate-template]');
+            const format = document.querySelector('[data-duplicate-format]');
+
+            if (postId) {
+                postId.value = button.getAttribute('data-post-id') || '';
+            }
+
+            if (postTitle) {
+                postTitle.textContent = button.getAttribute('data-post-title') || '';
+            }
+
+            if (template) {
+                template.value = button.getAttribute('data-template-id') || '';
+            }
+
+            if (format) {
+                format.value = button.getAttribute('data-format') || '';
+            }
+        });
+    });
 });

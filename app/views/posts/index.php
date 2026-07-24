@@ -68,11 +68,17 @@
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
                                     <a class="btn btn-sm btn-outline-primary" href="<?= e(url('/posts/edit?id=' . (int) $post['id'])) ?>">Editar</a>
-                                    <form method="post" action="<?= e(url('/posts/duplicate')) ?>">
-                                        <?= csrf_field() ?>
-                                        <input type="hidden" name="id" value="<?= (int) $post['id'] ?>">
-                                        <button class="btn btn-sm btn-outline-secondary" type="submit">Duplicar</button>
-                                    </form>
+                                    <button
+                                        class="btn btn-sm btn-outline-secondary"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#duplicatePostModal"
+                                        data-duplicate-post
+                                        data-post-id="<?= (int) $post['id'] ?>"
+                                        data-post-title="<?= e((string) $post['title']) ?>"
+                                        data-template-id="<?= (int) $post['template_id'] ?>"
+                                        data-format="<?= e((string) $post['format']) ?>"
+                                    >Duplicar</button>
                                     <form method="post" action="<?= e(url('/posts/delete')) ?>" data-confirm-title="Eliminar publicacion" data-confirm="Eliminar esta publicacion? Esta accion no se puede deshacer.">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="id" value="<?= (int) $post['id'] ?>">
@@ -87,3 +93,45 @@
         </div>
     <?php endif; ?>
 </section>
+
+<div class="modal fade" id="duplicatePostModal" tabindex="-1" aria-labelledby="duplicatePostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content duplicate-post-modal">
+            <form method="post" action="<?= e(url('/posts/duplicate')) ?>">
+                <?= csrf_field() ?>
+                <input type="hidden" name="id" data-duplicate-post-id>
+                <div class="modal-header">
+                    <div>
+                        <p class="section-kicker mb-1">Duplicar con variacion</p>
+                        <h2 class="modal-title h5" id="duplicatePostModalLabel">Nueva variante</h2>
+                    </div>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Se conservara el contenido y la imagen. Solo cambia la plantilla o el formato de salida.</p>
+                    <p class="text-muted small mb-3">Publicacion base: <strong data-duplicate-post-title></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label" for="duplicate_template_id">Plantilla</label>
+                        <select class="form-select" id="duplicate_template_id" name="template_id" data-duplicate-template required>
+                            <?php foreach ($templates as $template): ?>
+                                <option value="<?= (int) $template['id'] ?>"><?= e($template['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label" for="duplicate_format">Formato</label>
+                        <select class="form-select" id="duplicate_format" name="format" data-duplicate-format required>
+                            <?php foreach (PostService::FORMATS as $key => $format): ?>
+                                <option value="<?= e($key) ?>"><?= e($format['label']) ?> (<?= (int) $format['width'] ?> x <?= (int) $format['height'] ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="submit">Crear variante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

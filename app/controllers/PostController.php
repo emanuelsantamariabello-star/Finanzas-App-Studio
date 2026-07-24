@@ -78,8 +78,25 @@ final class PostController
         }
 
         try {
-            $newId = (new PostService(db()))->duplicate($id);
-            flash($newId === null ? 'error' : 'success', $newId === null ? 'No se encontro la publicacion.' : 'Publicacion duplicada.');
+            $pdo = db();
+            $templates = new TemplateService($pdo);
+            $templateId = valid_id($_POST['template_id'] ?? null);
+            $format = (string) ($_POST['format'] ?? '');
+
+            if ($templateId === null || $templates->find($templateId) === null || !isset(PostService::FORMATS[$format])) {
+                flash('error', 'Selecciona una plantilla y formato validos para duplicar.');
+                redirect('/posts');
+            }
+
+            $newId = (new PostService($pdo))->duplicate($id, $templateId, $format);
+
+            if ($newId === null) {
+                flash('error', 'No se encontro la publicacion.');
+                redirect('/posts');
+            }
+
+            flash('success', 'Publicacion duplicada con variacion.');
+            redirect('/posts/edit?id=' . $newId);
         } catch (Throwable) {
             flash('error', 'No fue posible duplicar la publicacion.');
         }

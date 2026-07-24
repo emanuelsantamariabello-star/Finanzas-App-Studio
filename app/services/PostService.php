@@ -57,7 +57,7 @@ final class PostService
         return $this->find($id) ?? [];
     }
 
-    public function duplicate(int $id): ?int
+    public function duplicate(int $id, ?int $templateId = null, ?string $format = null): ?int
     {
         $post = $this->find($id);
 
@@ -67,13 +67,13 @@ final class PostService
 
         $content = $this->decodeContent($post);
         $data = $this->normalize([
-            'template_id' => $post['template_id'],
+            'template_id' => $templateId ?? $post['template_id'],
             'title' => $post['title'] . ' (copia)',
             'subtitle' => $post['subtitle'],
             'description' => $post['description'],
             'cta_text' => $post['cta_text'],
             'version_label' => $post['version_label'],
-            'format' => $post['format'],
+            'format' => $format ?? $post['format'],
             'image_width' => $content['image_width'] ?? null,
             'image_height' => $content['image_height'] ?? null,
         ], null, $post['image_path']);
