@@ -44,6 +44,7 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
     <input type="hidden" data-existing-image-url value="<?= $imagePath !== '' ? e(url($imagePath)) : '' ?>">
     <input type="hidden" data-post-id value="<?= e((string) ($post['id'] ?? '')) ?>">
     <input type="hidden" data-export-url value="<?= $post !== null ? e(url('/posts/export')) : '' ?>">
+    <input type="hidden" data-export-pack-url value="<?= $post !== null ? e(url('/posts/export-pack')) : '' ?>">
 
     <section class="editor-panel">
         <div class="panel-header">
@@ -137,8 +138,9 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
                 <strong>Vista previa</strong>
                 <span class="text-muted" data-format-info></span>
             </div>
-            <div class="d-flex gap-2">
+            <div class="d-flex flex-wrap gap-2">
                 <button class="btn btn-sm btn-outline-secondary" type="button" data-preview-fit>Recentrar</button>
+                <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#exportPackModal" <?= $post === null ? 'disabled' : '' ?>>Exportar pack</button>
                 <button class="btn btn-sm btn-success" type="button" data-export-button <?= $post === null ? 'disabled' : '' ?>>Exportar PNG</button>
             </div>
         </div>
@@ -172,6 +174,46 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
         </div>
     </section>
 </form>
+
+<div class="modal fade" id="exportPackModal" tabindex="-1" aria-labelledby="exportPackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content export-pack-modal">
+            <div class="modal-header">
+                <div>
+                    <p class="section-kicker mb-1">Pack de exportacion</p>
+                    <h2 class="modal-title h5" id="exportPackModalLabel">Generar varios formatos</h2>
+                </div>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted small mb-3">Selecciona los formatos que quieres generar desde esta misma publicacion.</p>
+                <div class="export-pack-options">
+                    <?php foreach ($formats as $key => $format): ?>
+                        <label class="export-pack-option">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="export_pack_formats[]"
+                                value="<?= e($key) ?>"
+                                data-export-pack-format
+                                <?= $selectedFormat === $key ? 'checked' : '' ?>
+                            >
+                            <span>
+                                <strong><?= e($format['label']) ?></strong>
+                                <small><?= (int) $format['width'] ?> x <?= (int) $format['height'] ?>px</small>
+                            </span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <div class="alert alert-info small mt-3 mb-0" data-export-pack-status hidden></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" type="button" data-export-pack-button>Generar pack</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="mediaLibraryModal" tabindex="-1" aria-labelledby="mediaLibraryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -219,4 +261,4 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="<?= e(asset('js/editor/templates.js')) ?>"></script>
 <script src="<?= e(asset('js/editor/preview.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/js/editor/preview.js')) ?>"></script>
-<script src="<?= e(asset('js/editor/export.js')) ?>"></script>
+<script src="<?= e(asset('js/editor/export.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/js/editor/export.js')) ?>"></script>
