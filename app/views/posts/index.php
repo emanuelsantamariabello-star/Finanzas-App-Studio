@@ -73,7 +73,7 @@
                                         <input type="hidden" name="id" value="<?= (int) $post['id'] ?>">
                                         <button class="btn btn-sm btn-outline-secondary" type="submit">Duplicar</button>
                                     </form>
-                                    <form method="post" action="<?= e(url('/posts/delete')) ?>" data-confirm="Eliminar esta publicacion?">
+                                    <form method="post" action="<?= e(url('/posts/delete')) ?>" data-confirm-title="Eliminar publicacion" data-confirm="Eliminar esta publicacion? Esta accion no se puede deshacer.">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="id" value="<?= (int) $post['id'] ?>">
                                         <button class="btn btn-sm btn-outline-danger" type="submit">Eliminar</button>

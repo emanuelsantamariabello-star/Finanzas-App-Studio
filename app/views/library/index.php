@@ -92,7 +92,7 @@
                     </form>
                     <div class="d-flex flex-wrap gap-2">
                         <a class="btn btn-sm btn-outline-primary" href="<?= e((string) $file['url']) ?>" download>Descargar</a>
-                        <form method="post" action="<?= e(url('/library/delete')) ?>" data-confirm="Eliminar esta imagen de la biblioteca?">
+                        <form method="post" action="<?= e(url('/library/delete')) ?>" data-confirm-title="Eliminar imagen" data-confirm="Eliminar esta imagen de la biblioteca? Esta accion no se puede deshacer.">
                             <?= csrf_field() ?>
                             <input type="hidden" name="path" value="<?= e((string) $file['path']) ?>">
                             <button class="btn btn-sm btn-outline-danger" type="submit" <?= $useCount === null || (int) $useCount > 0 ? 'disabled' : '' ?>>Eliminar</button>
