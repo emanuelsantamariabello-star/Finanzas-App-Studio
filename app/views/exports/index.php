@@ -51,6 +51,7 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
+                        <th>Vista</th>
                         <th>Publicacion</th>
                         <th>Plantilla</th>
                         <th>Formato</th>
@@ -63,6 +64,15 @@
                     <?php foreach ($exports as $export): ?>
                         <?php $fileExists = is_file(APP_BASE_PATH . '/' . $export['file_path']); ?>
                         <tr>
+                            <td>
+                                <div class="list-preview-thumb" aria-label="Miniatura de exportacion">
+                                    <?php if ($fileExists): ?>
+                                        <img src="<?= e(url((string) $export['file_path'])) ?>" alt="<?= e($export['post_title']) ?>">
+                                    <?php else: ?>
+                                        <span>No disponible</span>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                             <td><?= e($export['post_title']) ?></td>
                             <td><?= e($export['template_name'] ?? 'Sin plantilla') ?></td>
                             <td><?= e($formats[$export['format']]['label'] ?? $export['format']) ?></td>

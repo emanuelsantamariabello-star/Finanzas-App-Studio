@@ -1,4 +1,24 @@
-<?php declare(strict_types=1); ?>
+<?php
+declare(strict_types=1);
+
+$templateLabels = [
+    'nueva-funcionalidad' => 'NUEVA FUNCIONALIDAD',
+    'consejo-financiero' => 'CONSEJO FINANCIERO',
+    'actualizacion-de-version' => 'ACTUALIZACION',
+];
+
+$templateCtas = [
+    'nueva-funcionalidad' => 'Conoce la novedad',
+    'consejo-financiero' => 'Aplicalo hoy',
+    'actualizacion-de-version' => 'Actualiza ahora',
+];
+
+$decodePostContent = static function (array $post): array {
+    $content = json_decode((string) ($post['content_json'] ?? ''), true);
+
+    return is_array($content) ? $content : [];
+};
+?>
 <section class="dashboard-header mb-4">
     <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
         <div>
@@ -49,6 +69,7 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
+                        <th>Vista</th>
                         <th>Titulo</th>
                         <th>Plantilla</th>
                         <th>Formato</th>
@@ -59,7 +80,69 @@
                 </thead>
                 <tbody>
                     <?php foreach ($posts as $post): ?>
+                        <?php
+                        $content = $decodePostContent($post);
+                        $imageExists = !empty($post['image_path']) && is_file(APP_BASE_PATH . '/' . $post['image_path']);
+                        $templateSlug = (string) ($post['template_slug'] ?? 'nueva-funcionalidad');
+                        $formatKey = (string) $post['format'];
+                        $format = PostService::FORMATS[$formatKey] ?? ['width' => 1080, 'height' => 1080];
+                        $formatWidth = (int) $format['width'];
+                        $formatHeight = (int) $format['height'];
+                        $previewScale = min(112 / $formatWidth, 76 / $formatHeight);
+                        $previewWidth = (int) round($formatWidth * $previewScale);
+                        $previewHeight = (int) round($formatHeight * $previewScale);
+                        $previewLabel = $templateLabels[$templateSlug] ?? strtoupper(str_replace('-', ' ', $templateSlug));
+                        $previewCta = (string) ($post['cta_text'] ?: ($templateCtas[$templateSlug] ?? ''));
+                        $previewVersion = (string) ($post['version_label'] ?? '');
+                        $adviceImageWidth = (int) ($content['image_width'] ?? 320);
+                        $adviceImageHeight = (int) ($content['image_height'] ?? 320);
+                        ?>
                         <tr>
+                            <td>
+                                <div class="list-preview-thumb list-post-preview-thumb" aria-label="Vista previa de publicacion">
+                                    <div class="list-post-preview-box" style="width: <?= (int) $previewWidth ?>px; height: <?= (int) $previewHeight ?>px;">
+                                        <article
+                                            class="post-canvas template-<?= e($templateSlug) ?> list-post-canvas"
+                                            data-format="<?= e($formatKey) ?>"
+                                            style="width: <?= (int) $formatWidth ?>px; height: <?= (int) $formatHeight ?>px; transform: scale(<?= e((string) $previewScale) ?>);"
+                                        >
+                                            <div class="post-bg-shape"></div>
+                                            <header class="post-header">
+                                                <div class="post-logo-frame">
+                                                    <img alt="Finanzas App" src="<?= e(asset('images/branding/logo-finanzas-app.png')) ?>">
+                                                </div>
+                                                <?php if ($previewVersion !== ''): ?>
+                                                    <span><?= e($previewVersion) ?></span>
+                                                <?php endif; ?>
+                                            </header>
+                                            <main class="post-content">
+                                                <span class="post-label"><?= e($previewLabel) ?></span>
+                                                <h2><?= e((string) $post['title']) ?></h2>
+                                                <?php if (!empty($post['subtitle'])): ?>
+                                                    <p class="post-subtitle"><?= e((string) $post['subtitle']) ?></p>
+                                                <?php endif; ?>
+                                                <p class="post-description"><?= e((string) ($post['description'] ?: 'Describe el beneficio principal para el usuario.')) ?></p>
+                                                <div class="post-visual">
+                                                    <div
+                                                        class="post-image-frame<?= $imageExists ? ' has-image' : '' ?>"
+                                                        style="--advice-image-width: <?= (int) $adviceImageWidth ?>px; --advice-image-height: <?= (int) $adviceImageHeight ?>px;"
+                                                    >
+                                                        <?php if ($imageExists): ?>
+                                                            <img src="<?= e(url((string) $post['image_path'])) ?>" alt="<?= e($post['title']) ?>">
+                                                        <?php endif; ?>
+                                                        <div class="post-image-placeholder">Vista del sistema</div>
+                                                    </div>
+                                                    <div class="post-css-icon"></div>
+                                                </div>
+                                                <?php if ($previewCta !== ''): ?>
+                                                    <strong class="post-cta"><?= e($previewCta) ?></strong>
+                                                <?php endif; ?>
+                                            </main>
+                                            <footer class="post-footer">finanzasappsan.com</footer>
+                                        </article>
+                                    </div>
+                                </div>
+                            </td>
                             <td><?= e($post['title']) ?></td>
                             <td><?= e($post['template_name'] ?? 'Sin plantilla') ?></td>
                             <td><?= e(PostService::FORMATS[$post['format']]['label'] ?? $post['format']) ?></td>
