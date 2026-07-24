@@ -44,12 +44,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const confirmModal = document.querySelector('[data-confirm-modal]');
+    const confirmTitle = document.querySelector('[data-confirm-title]');
+    const confirmMessage = document.querySelector('[data-confirm-message]');
+    const confirmSubmit = document.querySelector('[data-confirm-submit]');
+    let pendingConfirmForm = null;
+
     document.querySelectorAll('[data-confirm]').forEach((form) => {
         form.addEventListener('submit', (event) => {
-            if (!window.confirm(form.getAttribute('data-confirm') || 'Confirmar accion?')) {
-                event.preventDefault();
+            if (form.dataset.confirmed === 'true') {
+                delete form.dataset.confirmed;
+                return;
+            }
+
+            event.preventDefault();
+            pendingConfirmForm = form;
+
+            if (confirmTitle) {
+                confirmTitle.textContent = form.getAttribute('data-confirm-title') || 'Eliminar registro';
+            }
+
+            if (confirmMessage) {
+                confirmMessage.textContent = form.getAttribute('data-confirm') || 'Esta accion no se puede deshacer.';
+            }
+
+            if (confirmModal && window.bootstrap) {
+                window.bootstrap.Modal.getOrCreateInstance(confirmModal).show();
             }
         });
+    });
+
+    confirmSubmit?.addEventListener('click', () => {
+        if (!pendingConfirmForm) {
+            return;
+        }
+
+        pendingConfirmForm.dataset.confirmed = 'true';
+        pendingConfirmForm.requestSubmit();
+        pendingConfirmForm = null;
     });
 
     document.querySelectorAll('[data-auto-submit-file]').forEach((input) => {
