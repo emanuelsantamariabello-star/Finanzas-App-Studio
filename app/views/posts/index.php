@@ -49,6 +49,7 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
+                        <th>Vista</th>
                         <th>Titulo</th>
                         <th>Plantilla</th>
                         <th>Formato</th>
@@ -59,7 +60,17 @@
                 </thead>
                 <tbody>
                     <?php foreach ($posts as $post): ?>
+                        <?php $imageExists = !empty($post['image_path']) && is_file(APP_BASE_PATH . '/' . $post['image_path']); ?>
                         <tr>
+                            <td>
+                                <div class="list-preview-thumb" aria-label="Miniatura de publicacion">
+                                    <?php if ($imageExists): ?>
+                                        <img src="<?= e(url((string) $post['image_path'])) ?>" alt="<?= e($post['title']) ?>">
+                                    <?php else: ?>
+                                        <span>Sin imagen</span>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                             <td><?= e($post['title']) ?></td>
                             <td><?= e($post['template_name'] ?? 'Sin plantilla') ?></td>
                             <td><?= e(PostService::FORMATS[$post['format']]['label'] ?? $post['format']) ?></td>
