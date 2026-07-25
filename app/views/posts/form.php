@@ -258,7 +258,7 @@ $contentValue = static function (string $field, mixed $default = '') use ($old, 
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="<?= e(asset('vendor/html2canvas.min.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/vendor/html2canvas.min.js')) ?>"></script>
 <script src="<?= e(asset('js/editor/templates.js')) ?>"></script>
 <script src="<?= e(asset('js/editor/preview.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/js/editor/preview.js')) ?>"></script>
 <script src="<?= e(asset('js/editor/export.js') . '?v=' . filemtime(APP_BASE_PATH . '/assets/js/editor/export.js')) ?>"></script>
